@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Expense Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav>
+
+        <!-- Logo + Mobile Menu Button -->
+        <div class="nav-header">
+
+            <div class="logo">
+                <div class="logo-icon">💰</div>
+                <span>ExpenseFlow</span>
+            </div>
+
+            <button class="menu-btn" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+        </div>
+
+
+        <!-- Navigation Menu -->
+        <div class="nav-menu">
+
+            <div class="nav-links">
+
+                <a href="#" class="active">Dashboard</a>
+
+                <a href="#">Transactions</a>
+
+                <a href="#">Analytics</a>
+
+            </div>
+
+
+            <button class="add-btn">
+                + Add Transaction
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <main class="dashboard">
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+
+        <div>
+           <h1 id="greeting"></h1>
+            <p>Here's your financial overview</p>
+        </div>
+
+    </section>
+
+
+    <!-- Summary Cards -->
+    <section class="summary-cards">
+
+        <!-- Balance Card -->
+        <div class="summary-card">
+
+            <p class="card-label">Total Balance</p>
+
+            <h2>₹45,250</h2>
+
+            <span class="card-info">
+                Available balance
+            </span>
+
+        </div>
+
+
+        <!-- Income Card -->
+        <div class="summary-card">
+
+            <p class="card-label">Total Income</p>
+
+            <h2 class="income">₹60,000</h2>
+
+            <span class="card-info">
+                This month
+            </span>
+
+        </div>
+
+
+        <!-- Expense Card -->
+        <div class="summary-card">
+
+            <p class="card-label">Total Expenses</p>
+
+            <h2 class="expense">₹14,750</h2>
+
+            <span class="card-info">
+                This month
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-content">
+
+
+        <!-- Expense Overview -->
+        <div class="overview-card">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Expense Overview</h2>
+                    <p>Track your spending</p>
+                </div>
+
+                <select>
+                    <option>This Month</option>
+                    <option>Last Month</option>
+                    <option>This Year</option>
+                </select>
+
+            </div>
+
+
+            <!-- Chart will come later -->
+
+            <div class="chart-placeholder">
+                Chart will appear here
+            </div>
+
+        </div>
+
+
+        <!-- Recent Transactions -->
+        <div class="transactions-card">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Recent Transactions</h2>
+                    <p>Your latest activity</p>
+                </div>
+
+                <a href="#">View All</a>
+
+            </div>
+
+
+            <!-- Transaction 1 -->
+
+            <div class="transaction">
+
+                <div class="transaction-icon">
+                    🍔
+                </div>
+
+                <div class="transaction-info">
+
+                    <h3>Food</h3>
+
+                    <p>Today</p>
+
+                </div>
+
+                <span class="transaction-amount expense">
+                    -₹500
+                </span>
+
+            </div>
+
+
+            <!-- Transaction 2 -->
+
+            <div class="transaction">
+
+                <div class="transaction-icon">
+                    💼
+                </div>
+
+                <div class="transaction-info">
+
+                    <h3>Salary</h3>
+
+                    <p>Yesterday</p>
+
+                </div>
+
+                <span class="transaction-amount income">
+                    +₹30,000
+                </span>
+
+            </div>
+
+
+            <!-- Transaction 3 -->
+
+            <div class="transaction">
+
+                <div class="transaction-icon">
+                    ✈️
+                </div>
+
+                <div class="transaction-info">
+
+                    <h3>Travel</h3>
+
+                    <p>Aug 24</p>
+
+                </div>
+
+                <span class="transaction-amount expense">
+                    -₹1,200
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
