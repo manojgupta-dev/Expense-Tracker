@@ -506,48 +506,55 @@ nav {
 
     font-weight: 600;
 }
+/* add transaction modal */
+
+
+
 /* ========================================
    MOBILE RESPONSIVE
 ======================================== */
-
 @media (max-width: 768px) {
 
-    /* Navbar */
+    /* ========================================
+       NAVBAR
+    ======================================== */
 
     nav {
         flex-direction: column;
         align-items: stretch;
-
         padding: 14px 20px;
     }
 
 
-    /* Logo + Menu Button */
+    /* ========================================
+       LOGO + MENU BUTTON
+    ======================================== */
 
     .nav-header {
         display: flex;
-
         align-items: center;
         justify-content: space-between;
-
         width: 100%;
     }
 
 
-    /* Show Hamburger */
+    /* ========================================
+       HAMBURGER BUTTON
+    ======================================== */
 
     .menu-btn {
         display: flex;
     }
 
 
-    /* Navigation Menu */
+    /* ========================================
+       NAVIGATION MENU
+    ======================================== */
 
     .nav-menu {
         display: none;
 
         flex-direction: column;
-
         align-items: stretch;
 
         width: 100%;
@@ -558,14 +565,18 @@ nav {
     }
 
 
-    /* Open Menu */
+    /* ========================================
+       OPEN MENU
+    ======================================== */
 
     .nav-menu.menu-open {
         display: flex;
     }
 
 
-    /* Links */
+    /* ========================================
+       NAV LINKS
+    ======================================== */
 
     .nav-links {
         flex-direction: column;
@@ -585,16 +596,18 @@ nav {
     }
 
 
-    /* Add Button */
+    /* ========================================
+       ADD TRANSACTION BUTTON
+    ======================================== */
 
     .add-btn {
         width: 100%;
     }
 
 
-    /* ====================================
+    /* ========================================
        HAMBURGER → X
-    ==================================== */
+    ======================================== */
 
     .menu-btn.menu-open span:nth-child(1) {
         transform: translateY(7px) rotate(45deg);
@@ -607,28 +620,383 @@ nav {
     .menu-btn.menu-open span:nth-child(3) {
         transform: translateY(-7px) rotate(-45deg);
     }
+
+
+    /* ========================================
+       DASHBOARD MOBILE
+    ======================================== */
+
     .dashboard {
-    padding: 24px 20px;
+        padding: 24px 20px;
+    }
+
+
+    .dashboard-header {
+        margin-bottom: 24px;
+    }
+
+
+    .dashboard-header h1 {
+        font-size: var(--text-xl);
+    }
+
+
+    .summary-cards {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+
+    .dashboard-content {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+}
+/* ========================================
+   ADD TRANSACTION MODAL
+======================================== */
+
+.modal-overlay {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 1000;
+}
+.modal-overlay.show {
+    display: flex;
 }
 
-.dashboard-header {
-    margin-bottom: 24px;
+
+.transaction-modal {
+    width: 100%;
+    max-width: 500px;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-lg);
+
+    padding: var(--space-xl);
+
+    box-shadow: var(--shadow-md);
 }
 
-.dashboard-header h1 {
+
+/* ========================================
+   MODAL HEADER
+======================================== */
+
+.modal-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-lg);
+}
+
+
+.modal-header h2 {
     font-size: var(--text-xl);
+
+    color: var(--text-primary);
+
+    margin-bottom: var(--space-xs);
 }
 
-.summary-cards {
-    grid-template-columns: 1fr;
 
-    gap: 12px;
+.modal-header p {
+    font-size: var(--text-sm);
+
+    color: var(--text-secondary);
 }
 
-.dashboard-content {
-    grid-template-columns: 1fr;
 
-    gap: 16px;
+/* ========================================
+   CLOSE BUTTON
+======================================== */
+
+.close-modal {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+
+    color: var(--text-secondary);
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
 }
 
+
+.close-modal:hover {
+    background: var(--bg-secondary);
+
+    color: var(--text-primary);
 }
+
+
+/* ========================================
+   EXPENSE / INCOME TOGGLE
+======================================== */
+
+.transaction-type {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+
+    padding: 4px;
+
+    margin-bottom: var(--space-lg);
+
+    background: var(--bg-secondary);
+
+    border-radius: var(--radius-md);
+}
+
+
+.type-btn {
+    padding: 10px;
+
+    border: none;
+
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+
+    color: var(--text-secondary);
+
+    font-size: var(--text-sm);
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+
+.type-btn.active {
+    background: var(--primary);
+
+    color: var(--text-primary);
+}
+
+
+/* ========================================
+   FORM
+======================================== */
+
+#transactionForm {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-md);
+}
+
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: var(--space-sm);
+}
+
+
+.form-group label {
+    font-size: var(--text-sm);
+
+    font-weight: 500;
+
+    color: var(--text-primary);
+}
+
+
+/* ========================================
+   INPUTS
+======================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-sm);
+
+    background: var(--bg-secondary);
+
+    color: var(--text-primary);
+
+    font-family: inherit;
+
+    font-size: var(--text-sm);
+
+    outline: none;
+
+    transition: border-color 0.2s ease;
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary);
+}
+
+
+.form-group textarea {
+    resize: vertical;
+
+    min-height: 90px;
+}
+
+
+/* ========================================
+   AMOUNT INPUT
+======================================== */
+
+.amount-input {
+    display: flex;
+
+    align-items: center;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-sm);
+
+    background: var(--bg-secondary);
+
+    overflow: hidden;
+}
+
+
+.amount-input span {
+    padding-left: 14px;
+
+    color: var(--text-secondary);
+
+    font-size: var(--text-md);
+
+    font-weight: 600;
+}
+
+
+.amount-input input {
+    border: none;
+
+    background: transparent;
+
+    flex: 1;
+}
+
+
+.amount-input:focus-within {
+    border-color: var(--primary);
+}
+
+
+/* ========================================
+   SUBMIT BUTTON
+======================================== */
+
+.submit-transaction {
+    width: 100%;
+
+    padding: 12px 16px;
+
+    margin-top: var(--space-sm);
+
+    border: none;
+
+    border-radius: var(--radius-sm);
+
+    background: var(--primary);
+
+    color: var(--text-primary);
+
+    font-size: var(--text-sm);
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+
+.submit-transaction:hover {
+    background: var(--primary-hover);
+
+    transform: translateY(-1px);
+}
+
+
+/* ========================================
+   MOBILE MODAL
+======================================== */
+
+@media (max-width: 768px) {
+
+    .transaction-modal {
+        max-width: 100%;
+
+        padding: 20px;
+
+        border-radius: var(--radius-md);
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .modal-overlay {
+        padding: 12px;
+    }
+
+
+    .transaction-modal {
+        padding: 16px;
+    }
+
+
+    .modal-header h2 {
+        font-size: var(--text-lg);
+    }
+
+}
+
