@@ -255,3 +255,80 @@ typeButtons.forEach((button) => {
 // ========================================
 
 updateCategories("expense");
+// ========================================
+// SAVE TRANSACTION
+// ========================================
+
+transactionForm?.addEventListener("submit", (event) => {
+
+    // Page reload ko rokna
+    event.preventDefault();
+
+
+    // Selected transaction type
+    const activeType =
+        document.querySelector(".type-btn.active");
+
+
+    const type =
+        activeType.dataset.type;
+
+
+    // Form values
+    const amount =
+        Number(document.querySelector("#amount").value);
+
+    const category =
+        document.querySelector("#category").value;
+
+    const date =
+        document.querySelector("#date").value;
+
+    const description =
+        document.querySelector("#description").value.trim();
+
+
+    // Create transaction object
+    const transaction = {
+
+        id: Date.now(),
+
+        type: type,
+
+        amount: amount,
+
+        category: category,
+
+        date: date,
+
+        description: description
+
+    };
+
+
+    // Get old transactions
+    const transactions =
+        JSON.parse(
+            localStorage.getItem("transactions")
+        ) || [];
+
+
+    // Add new transaction
+    transactions.push(transaction);
+
+
+    // Save updated transactions
+    localStorage.setItem(
+        "transactions",
+        JSON.stringify(transactions)
+    );
+
+
+    // Success message
+    alert("Transaction added successfully!");
+
+
+    // Close modal
+    closeModal();
+
+});
