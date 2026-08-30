@@ -115,68 +115,58 @@
         <!-- ==============================
              SUMMARY CARDS
         =============================== -->
-
         <section class="summary-cards">
 
+    <!-- Balance -->
+    <div class="summary-card">
+        <p class="card-label">
+            Total Balance
+        </p>
 
-            <!-- Balance -->
+        <h2 id="totalBalance">
+            ₹0
+        </h2>
 
-            <div class="summary-card">
-
-                <p class="card-label">
-                    Total Balance
-                </p>
-
-                <h2>
-                    ₹45,250
-                </h2>
-
-                <span class="card-info">
-                    Available balance
-                </span>
-
-            </div>
+        <span class="card-info">
+            Available balance
+        </span>
+    </div>
 
 
-            <!-- Income -->
+    <!-- Income -->
+    <div class="summary-card">
+        <p class="card-label">
+            Total Income
+        </p>
 
-            <div class="summary-card">
+        <h2 id="totalIncome" class="income">
+            ₹0
+        </h2>
 
-                <p class="card-label">
-                    Total Income
-                </p>
-
-                <h2 class="income">
-                    ₹60,000
-                </h2>
-
-                <span class="card-info">
-                    This month
-                </span>
-
-            </div>
+        <span class="card-info">
+            This month
+        </span>
+    </div>
 
 
-            <!-- Expenses -->
+    <!-- Expenses -->
+    <div class="summary-card">
+        <p class="card-label">
+            Total Expenses
+        </p>
 
-            <div class="summary-card">
+        <h2 id="totalExpenses" class="expense">
+            ₹0
+        </h2>
 
-                <p class="card-label">
-                    Total Expenses
-                </p>
+        <span class="card-info">
+            This month
+        </span>
+    </div>
 
-                <h2 class="expense">
-                    ₹14,750
-                </h2>
+</section>
 
-                <span class="card-info">
-                    This month
-                </span>
-
-            </div>
-
-        </section>
-
+       
 
 
         <!-- ==============================
@@ -253,96 +243,12 @@
                     </div>
 
 
-                    <a href="#">
-                        View All
-                    </a>
+                  <a href="#" id="viewAllTransactions">
+    View All
+</a>
 
                 </div>
-
-
-                <!-- Transaction 1 -->
-
-                <div class="transaction">
-
-                    <div class="transaction-icon">
-                        🍔
-                    </div>
-
-                    <div class="transaction-info">
-
-                        <h3>
-                            Food
-                        </h3>
-
-                        <p>
-                            Today
-                        </p>
-
-                    </div>
-
-                    <span class="transaction-amount expense">
-                        -₹500
-                    </span>
-
-                </div>
-
-
-                <!-- Transaction 2 -->
-
-                <div class="transaction">
-
-                    <div class="transaction-icon">
-                        💼
-                    </div>
-
-                    <div class="transaction-info">
-
-                        <h3>
-                            Salary
-                        </h3>
-
-                        <p>
-                            Yesterday
-                        </p>
-
-                    </div>
-
-                    <span class="transaction-amount income">
-                        +₹30,000
-                    </span>
-
-                </div>
-
-
-                <!-- Transaction 3 -->
-
-                <div class="transaction">
-
-                    <div class="transaction-icon">
-                        ✈️
-                    </div>
-
-                    <div class="transaction-info">
-
-                        <h3>
-                            Travel
-                        </h3>
-
-                        <p>
-                            Aug 24
-                        </p>
-
-                    </div>
-
-                    <span class="transaction-amount expense">
-                        -₹1,200
-                    </span>
-
-                </div>
-
-            </div>
-
-
+                <div id="transactionsList"></div>
         </section>
 
     </main>
@@ -516,7 +422,35 @@
     </div>
 
 </div>
+<!-- ========================================
+     ALL TRANSACTIONS MODAL
+======================================== -->
 
+<div class="all-transactions-modal" id="allTransactionsModal">
+
+    <div class="all-transactions-content">
+
+        <div class="section-header">
+
+            <div>
+                <h2>All Transactions</h2>
+                <p>Your complete transaction history</p>
+            </div>
+
+            <button id="closeAllTransactions">
+                ×
+            </button>
+
+        </div>
+
+
+        <div id="allTransactionsList">
+            <!-- Transactions will appear here -->
+        </div>
+
+    </div>
+
+</div>
  
 <script src="./js/script.js"></script>
 </body>

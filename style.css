@@ -999,4 +999,191 @@ nav {
     }
 
 }
+/* ========================================
+   ALL TRANSACTIONS MODAL
+======================================== */
 
+.all-transactions-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.7);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 1100;
+}
+
+
+.all-transactions-modal.show {
+    display: flex;
+}
+
+
+.all-transactions-content {
+    width: 100%;
+    max-width: 700px;
+
+    max-height: 80vh;
+
+    overflow-y: auto;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-lg);
+
+    padding: var(--space-xl);
+}
+
+
+#closeAllTransactions {
+    border: none;
+
+    background: transparent;
+
+    color: var(--text-secondary);
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+
+#closeAllTransactions:hover {
+    color: var(--text-primary);
+}
+/* ========================================
+   TRANSACTION ACTIONS
+======================================== */
+/* ========================================
+   TRANSACTION ACTION BUTTONS
+======================================== */
+
+.transaction {
+    display: flex;
+    align-items: center;
+}
+
+.transaction-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.transaction-actions button {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: all 0.2s ease;
+}
+
+.transaction-actions button:hover {
+    background-color: var(--border);
+    transform: translateY(-1px);
+}
+
+.delete-btn:hover {
+    border-color: var(--expense) !important;
+}
+
+.edit-btn:hover {
+    border-color: var(--primary) !important;
+}
+.transaction-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+.transaction-actions button {
+    width: 32px;
+    height: 32px;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.transaction-actions button:hover {
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.delete-btn:hover {
+    color: var(--expense) !important;
+}
+/* ========================================
+   TRANSACTION ACTIONS
+======================================== */
+
+.transaction {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.transaction-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.transaction-actions button {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    background: transparent;
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: all 0.2s ease;
+}
+
+.transaction-actions button:hover {
+    background-color: var(--border);
+    transform: translateY(-1px);
+}
+
+.delete-btn:hover {
+    border-color: var(--expense) !important;
+}
+
+.edit-btn:hover {
+    border-color: var(--primary) !important;
+}
