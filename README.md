@@ -29,6 +29,6 @@ ExpenseFlow is a sleek, modern, and fully responsive personal finance dashboard 
 ```text
 ExpenseFlow/
 ├── index.html        # Main dashboard markup
-├── style.css         # ExpenseFlow UI Styles (Theme Variables & Components)
-├── script.js        # Dynamic theme toggling & interactive UI logic
+├── css/style.css         # ExpenseFlow UI Styles (Theme Variables & Components)
+├──js/ script.js        # Dynamic theme toggling & interactive UI logic
 └── README.md         # Project documentation
