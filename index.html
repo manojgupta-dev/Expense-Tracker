@@ -1,1240 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <meta name="description"
-        content="ExpenseFlow - Smart personal expense and income tracker">
-
-    <title>ExpenseFlow - Smart Expense Tracker</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseFlow – Smart Personal Expense & Income Tracker</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
-
 <body>
 
-    <!-- ========================================
-         NAVBAR
-    ========================================= -->
-
     <nav class="navbar">
-
-        <div class="nav-header">
-
-            <!-- Logo -->
-            <a href="#dashboard" class="logo">
-
-                <div class="logo-icon">
-                    💰
-                </div>
-
-                <span>
-                    ExpenseFlow
-                </span>
-
-            </a>
-
-
-            <!-- Mobile Menu Button -->
-            <button
-                class="menu-btn"
-                id="menuBtn"
-                aria-label="Open navigation menu"
-                aria-expanded="false">
-
-                <span></span>
-                <span></span>
-                <span></span>
-
-            </button>
-
-        </div>
-
-
-        <!-- Navigation Menu -->
-        <div class="nav-menu" id="navMenu">
-
-            <div class="nav-links">
-
-                <a href="#dashboard" class="active">
-                    Dashboard
-                </a>
-
-                <a href="#transactions">
-                    Transactions
-                </a>
-
-                <a href="#analytics">
-                    Analytics
-                </a>
-
+        <div class="nav-container">
+            <div class="brand">
+                <i class="fa-solid fa-wallet brand-icon"></i>
+                <h2>ExpenseFlow</h2>
             </div>
-
-
-            <button
-                class="add-btn"
-                id="addTransactionBtn">
-
-                + Add Transaction
-
+            
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle Navigation">
+                <i class="fa-solid fa-bars"></i>
             </button>
 
+            <div class="nav-menu" id="navMenu">
+                <a href="#dashboard" class="nav-link active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#transactions" class="nav-link"><i class="fa-solid fa-list-check"></i> Transactions</a>
+                <a href="#analytics" class="nav-link"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
+                <button class="btn btn-primary nav-btn" id="openModalBtn">
+                    <i class="fa-solid fa-plus"></i> Add Transaction
+                </button>
+            </div>
         </div>
-
     </nav>
 
-
-
-    <!-- ========================================
-         MAIN DASHBOARD
-    ========================================= -->
-
-    <main class="dashboard" id="dashboard">
-
-
-        <!-- ====================================
-             DASHBOARD HEADER
-        ===================================== -->
-
-        <section class="dashboard-header">
-
-            <div>
-
-                <h1 id="greeting">
-                    Good Morning 👋
-                </h1>
-
-                <p>
-                    Here's your financial overview
-                </p>
-
-            </div>
-
-
-            <!-- Current Date -->
-            <div class="current-date"
-                id="currentDate">
-            </div>
-
-        </section>
-
-
-
-        <!-- ====================================
-             SUMMARY CARDS
-        ===================================== -->
-
-        <section class="summary-cards">
-
-
-            <!-- Balance -->
-            <div class="summary-card">
-
-                <div class="card-top">
-
-                    <p class="card-label">
-                        Total Balance
-                    </p>
-
-                    <div class="card-icon balance-icon">
-                        💳
-                    </div>
-
-                </div>
-
-                <h2 id="totalBalance">
-                    ₹0
-                </h2>
-
-                <span class="card-info">
-                    Available balance
-                </span>
-
-            </div>
-
-
-            <!-- Income -->
-            <div class="summary-card">
-
-                <div class="card-top">
-
-                    <p class="card-label">
-                        Total Income
-                    </p>
-
-                    <div class="card-icon income-icon">
-                        📈
-                    </div>
-
-                </div>
-
-                <h2
-                    class="income"
-                    id="totalIncome">
-
-                    ₹0
-
-                </h2>
-
-                <span class="card-info">
-                    This month
-                </span>
-
-            </div>
-
-
-            <!-- Expense -->
-            <div class="summary-card">
-
-                <div class="card-top">
-
-                    <p class="card-label">
-                        Total Expenses
-                    </p>
-
-                    <div class="card-icon expense-icon">
-                        📉
-                    </div>
-
-                </div>
-
-                <h2
-                    class="expense"
-                    id="totalExpense">
-
-                    ₹0
-
-                </h2>
-
-                <span class="card-info">
-                    This month
-                </span>
-
-            </div>
-
-
-            <!-- Savings -->
-            <div class="summary-card">
-
-                <div class="card-top">
-
-                    <p class="card-label">
-                        Savings
-                    </p>
-
-                    <div class="card-icon savings-icon">
-                        💎
-                    </div>
-
-                </div>
-
-                <h2
-                    class="savings"
-                    id="totalSavings">
-
-                    ₹0
-
-                </h2>
-
-                <span class="card-info">
-                    Income - Expenses
-                </span>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ====================================
-             DASHBOARD CONTENT
-        ===================================== -->
-
-        <section class="dashboard-content">
-
-
-            <!-- =================================
-                 EXPENSE OVERVIEW
-            ================================== -->
-
-            <div class="overview-card">
-
-                <div class="section-header">
-
-                    <div>
-
-                        <h2>
-                            Expense Overview
-                        </h2>
-
-                        <p>
-                            Track your spending
-                        </p>
-
-                    </div>
-
-
-                    <select id="overviewFilter">
-
-                        <option value="month">
-                            This Month
-                        </option>
-
-                        <option value="week">
-                            This Week
-                        </option>
-
-                        <option value="year">
-                            This Year
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- Category Overview -->
-                <div
-                    class="category-overview"
-                    id="categoryOverview">
-
-                    <div class="empty-state">
-
-                        <span>
-                            📊
-                        </span>
-
-                        <p>
-                            No expense data available.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================
-                 RECENT TRANSACTIONS
-            ================================== -->
-
-            <div
-                class="transactions-card"
-                id="transactions">
-
-                <div class="section-header">
-
-                    <div>
-
-                        <h2>
-                            Recent Transactions
-                        </h2>
-
-                        <p>
-                            Your latest activity
-                        </p>
-
-                    </div>
-
-
-                    <button
-                        class="view-all-btn"
-                        id="viewAllBtn">
-
-                        View All
-
-                    </button>
-
-                </div>
-
-
-                <!-- Transactions List -->
-                <div
-                    class="transactions-list"
-                    id="recentTransactions">
-
-                    <div class="empty-state">
-
-                        <span>
-                            🧾
-                        </span>
-
-                        <p>
-                            No transactions yet.
-                        </p>
-
-                        <small>
-                            Add your first transaction.
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ========================================
-             ALL TRANSACTIONS SECTION
-        ========================================= -->
-
-        <section
-            class="all-transactions-section"
-            id="allTransactionsSection">
-
-
-            <div class="section-header">
-
+    <main class="main-container">
+        
+        <div id="toastContainer" class="toast-container"></div>
+
+        <section id="dashboard" class="page-section">
+            <header class="dashboard-header">
                 <div>
+                    <h1 id="greetingMsg">Good Morning, User!</h1>
+                    <p id="currentDateDisplay" class="text-muted">Loading date...</p>
+                </div>
+            </header>
 
-                    <h2>
-                        All Transactions
-                    </h2>
-
-                    <p>
-                        Manage your complete transaction history
-                    </p>
-
+            <div class="cards-grid">
+                <div class="card card-balance">
+                    <div class="card-info">
+                        <span>Total Balance</span>
+                        <h2 id="totalBalance">₹0.00</h2>
+                    </div>
+                    <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
                 </div>
 
-            </div>
-
-
-            <!-- Search + Filters -->
-            <div class="transaction-controls">
-
-
-                <!-- Search -->
-                <div class="search-box">
-
-                    <span>
-                        🔍
-                    </span>
-
-                    <input
-                        type="search"
-                        id="searchTransaction"
-                        placeholder="Search transactions...">
-
+                <div class="card card-income">
+                    <div class="card-info">
+                        <span>Total Income</span>
+                        <h2 id="totalIncome">₹0.00</h2>
+                    </div>
+                    <div class="card-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
                 </div>
 
-
-                <!-- Type Filter -->
-                <select id="typeFilter">
-
-                    <option value="all">
-                        All Types
-                    </option>
-
-                    <option value="income">
-                        Income
-                    </option>
-
-                    <option value="expense">
-                        Expense
-                    </option>
-
-                </select>
-
-
-                <!-- Category Filter -->
-                <select id="categoryFilter">
-
-                    <option value="all">
-                        All Categories
-                    </option>
-
-                </select>
-
-
-                <!-- Date Filter -->
-                <select id="dateFilter">
-
-                    <option value="all">
-                        All Dates
-                    </option>
-
-                    <option value="today">
-                        Today
-                    </option>
-
-                    <option value="week">
-                        This Week
-                    </option>
-
-                    <option value="month">
-                        This Month
-                    </option>
-
-                    <option value="year">
-                        This Year
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- All Transactions -->
-            <div
-                class="all-transactions-list"
-                id="allTransactions">
-
-                <div class="empty-state">
-
-                    <span>
-                        🧾
-                    </span>
-
-                    <p>
-                        No transactions found.
-                    </p>
-
+                <div class="card card-expense">
+                    <div class="card-info">
+                        <span>Total Expenses</span>
+                        <h2 id="totalExpenses">₹0.00</h2>
+                    </div>
+                    <div class="card-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
                 </div>
 
+                <div class="card card-savings">
+                    <div class="card-info">
+                        <span>Net Savings Rate</span>
+                        <h2 id="totalSavings">0%</h2>
+                    </div>
+                    <div class="card-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                </div>
             </div>
 
+            <div class="dashboard-grid">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Recent Transactions (Latest 5)</h3>
+                        <a href="#transactions" class="link-btn">View All</a>
+                    </div>
+                    <ul id="recentTransactionsList" class="transaction-list">
+                        </ul>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Smart Insights</h3>
+                    </div>
+                    <div id="smartInsightsContainer" class="insights-container">
+                        </div>
+                </div>
+            </div>
         </section>
 
-
-
-        <!-- ========================================
-             REPORTS & ANALYTICS
-        ========================================= -->
-
-        <section
-            class="reports-section"
-            id="analytics">
-
-
-            <!-- Reports Header -->
-            <div class="reports-header">
-
-                <div>
-
-                    <h2>
-                        Reports & Analytics
-                    </h2>
-
-                    <p>
-                        Understand your money better
-                    </p>
-
+        <section id="transactions" class="page-section">
+            <div class="panel">
+                <div class="panel-header flex-mobile-column">
+                    <h3>All Transactions History</h3>
+                    <div class="data-actions">
+                        <button id="exportCsvBtn" class="btn btn-secondary"><i class="fa-solid fa-file-export"></i> Export CSV</button>
+                        <label for="importCsvInput" class="btn btn-secondary custom-file-upload">
+                            <i class="fa-solid fa-file-import"></i> Import CSV
+                        </label>
+                        <input type="file" id="importCsvInput" accept=".csv" style="display: none;">
+                    </div>
                 </div>
 
+                <div class="filter-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" placeholder="Search description or category...">
+                    </div>
+                    
+                    <div class="filter-controls">
+                        <input type="month" id="monthPickerInput" class="date-input" title="Filter by Month">
 
-                <!-- Report Filters -->
-                <div class="report-filters">
+                        <input type="date" id="startDateInput" class="date-input" title="Start Date">
+                        <input type="date" id="endDateInput" class="date-input" title="End Date">
 
+                        <select id="typeFilter">
+                            <option value="all">All Types</option>
+                            <option value="income">Income Only</option>
+                            <option value="expense">Expense Only</option>
+                        </select>
 
-                    <!-- Period -->
-                    <select id="reportFilter">
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                        </select>
 
-                        <option value="month">
-                            Monthly
-                        </option>
+                        <select id="dateFilter">
+                            <option value="all">Quick Presets</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
 
-                        <option value="week">
-                            Weekly
-                        </option>
-
-                        <option value="year">
-                            Yearly
-                        </option>
-
-                    </select>
-
-
-                    <!-- Month -->
-                    <select id="monthFilter">
-
-                        <!-- JavaScript will populate -->
-
-                    </select>
-
-
-                    <!-- Year -->
-                    <select id="yearFilter">
-
-                        <!-- JavaScript will populate -->
-
-                    </select>
-
+                        <button id="clearFiltersBtn" class="btn btn-secondary" title="Clear Filters">
+                            <i class="fa-solid fa-rotate-left"></i> Clear
+                        </button>
+                    </div>
                 </div>
 
+                <ul id="allTransactionsList" class="transaction-list">
+                    </ul>
             </div>
-
-
-
-            <!-- =================================
-                 REPORT SUMMARY
-            ================================== -->
-
-            <div class="report-summary">
-
-
-                <!-- Report Income -->
-                <div class="report-card">
-
-                    <div class="report-icon income-icon">
-                        💰
-                    </div>
-
-                    <div>
-
-                        <p>
-                            Total Income
-                        </p>
-
-                        <h3 id="reportIncome">
-                            ₹0
-                        </h3>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Report Expense -->
-                <div class="report-card">
-
-                    <div class="report-icon expense-icon">
-                        💸
-                    </div>
-
-                    <div>
-
-                        <p>
-                            Total Expense
-                        </p>
-
-                        <h3 id="reportExpense">
-                            ₹0
-                        </h3>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Report Savings -->
-                <div class="report-card">
-
-                    <div class="report-icon savings-icon">
-                        💎
-                    </div>
-
-                    <div>
-
-                        <p>
-                            Total Savings
-                        </p>
-
-                        <h3 id="reportSavings">
-                            ₹0
-                        </h3>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Transaction Count -->
-                <div class="report-card">
-
-                    <div class="report-icon">
-                        🧾
-                    </div>
-
-                    <div>
-
-                        <p>
-                            Transactions
-                        </p>
-
-                        <h3 id="reportTransactionCount">
-                            0
-                        </h3>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================
-                 ANALYTICS CONTENT
-            ================================== -->
-
-            <div class="analytics-content">
-
-
-                <!-- Income vs Expense -->
-                <div class="analytics-card">
-
-                    <div class="analytics-card-header">
-
-                        <div>
-
-                            <h3>
-                                Income vs Expense
-                            </h3>
-
-                            <p>
-                                Compare your money flow
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="income-expense-chart">
-
-
-                        <!-- Income -->
-                        <div class="chart-item">
-
-                            <div class="chart-label">
-
-                                <span>
-                                    Income
-                                </span>
-
-                                <strong id="chartIncome">
-                                    ₹0
-                                </strong>
-
-                            </div>
-
-
-                            <div class="chart-track">
-
-                                <div
-                                    class="chart-bar income-bar"
-                                    id="incomeBar">
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Expense -->
-                        <div class="chart-item">
-
-                            <div class="chart-label">
-
-                                <span>
-                                    Expense
-                                </span>
-
-                                <strong id="chartExpense">
-                                    ₹0
-                                </strong>
-
-                            </div>
-
-
-                            <div class="chart-track">
-
-                                <div
-                                    class="chart-bar expense-bar"
-                                    id="expenseBar">
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- Daily Spending -->
-                <div class="analytics-card">
-
-                    <div class="analytics-card-header">
-
-                        <div>
-
-                            <h3>
-                                Daily Spending
-                            </h3>
-
-                            <p>
-                                Your recent spending activity
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="daily-spending"
-                        id="dailySpending">
-
-                        <div class="empty-state">
-
-                            <span>
-                                📅
-                            </span>
-
-                            <p>
-                                No spending data available.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================
-                 FINANCIAL INSIGHTS
-            ================================== -->
-
-            <div class="financial-insights">
-
-                <div class="analytics-card">
-
-                    <div class="analytics-card-header">
-
-                        <h3>
-                            Smart Insights
-                        </h3>
-
-                        <p>
-                            Helpful information about your spending
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="insights-list"
-                        id="insightsList">
-
-                        <div class="insight-item">
-
-                            <span>
-                                💡
-                            </span>
-
-                            <p>
-                                Add some transactions to generate
-                                personalized insights.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
         </section>
 
+        <section id="analytics" class="page-section">
+            <div class="analytics-grid">
+                
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Category Expense Breakdown</h3>
+                        <select id="analyticsTimeframe">
+                            <option value="month">This Month</option>
+                            <option value="week">This Week</option>
+                            <option value="year">This Year</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+                    <div id="categoryBreakdownContainer" class="breakdown-container">
+                        </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3>Income vs Expense Ratio</h3>
+                    </div>
+                    <div class="visual-comparison">
+                        <div class="ratio-item">
+                            <div class="ratio-label"><span>Income</span><strong id="visualIncomeVal">₹0</strong></div>
+                            <div class="progress-bar-bg"><div id="visualIncomeBar" class="progress-bar-fill income-bg" style="width: 0%;"></div></div>
+                        </div>
+                        <div class="ratio-item">
+                            <div class="ratio-label"><span>Expense</span><strong id="visualExpenseVal">₹0</strong></div>
+                            <div class="progress-bar-bg"><div id="visualExpenseBar" class="progress-bar-fill expense-bg" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel full-width">
+                    <div class="panel-header">
+                        <h3>Daily Spending Breakdown</h3>
+                    </div>
+                    <div id="dailySpendingContainer" class="daily-spending-list">
+                        </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-
-
-    <!-- ========================================
-         ADD TRANSACTION MODAL
-    ========================================= -->
-
-    <div
-        class="modal-overlay"
-        id="transactionModal"
-        aria-hidden="true">
-
-
-        <div
-            class="transaction-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modalTitle">
-
-
-            <!-- Modal Header -->
+    <div class="modal-overlay" id="transactionModal">
+        <div class="modal-content">
             <div class="modal-header">
-
-                <div>
-
-                    <h2 id="modalTitle">
-                        Add Transaction
-                    </h2>
-
-                    <p>
-                        Record your income or expense
-                    </p>
-
-                </div>
-
-
-                <button
-                    class="close-modal"
-                    id="closeModal"
-                    aria-label="Close modal">
-
-                    ×
-
-                </button>
-
+                <h3 id="modalTitle">Add New Transaction</h3>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
             </div>
-
-
-
-            <!-- Transaction Form -->
+            
             <form id="transactionForm">
+                <input type="hidden" id="transactionId">
 
+                <div class="type-selector">
+                    <button type="button" class="type-btn active-expense" id="typeExpenseBtn">Expense</button>
+                    <button type="button" class="type-btn" id="typeIncomeBtn">Income</button>
+                </div>
 
-                <!-- Transaction Type -->
                 <div class="form-group">
-
-                    <label>
-                        Transaction Type
-                    </label>
-
-
-                    <div class="transaction-type">
-
-                        <button
-                            type="button"
-                            class="type-btn active"
-                            data-type="expense">
-
-                            💸 Expense
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="type-btn"
-                            data-type="income">
-
-                            💰 Income
-
-                        </button>
-
-                    </div>
-
-                    <input
-                        type="hidden"
-                        id="transactionType"
-                        value="expense">
-
+                    <label for="amountInput">Amount (₹)*</label>
+                    <input type="number" id="amountInput" step="0.01" min="0.01" placeholder="e.g. 250" required>
                 </div>
 
-
-
-                <!-- Amount -->
                 <div class="form-group">
-
-                    <label for="amount">
-                        Amount
-                    </label>
-
-                    <div class="amount-input">
-
-                        <span>
-                            ₹
-                        </span>
-
-                        <input
-                            type="number"
-                            id="amount"
-                            name="amount"
-                            placeholder="0.00"
-                            min="0"
-                            step="0.01"
-                            required>
-
-                    </div>
-
+                    <label for="categoryInput">Category*</label>
+                    <select id="categoryInput" required></select>
                 </div>
 
-
-
-                <!-- Category -->
                 <div class="form-group">
-
-                    <label for="category">
-                        Category
-                    </label>
-
-                    <select
-                        id="category"
-                        name="category"
-                        required>
-
-                        <!-- Expense Categories -->
-                        <optgroup
-                            label="Expense Categories"
-                            id="expenseCategories">
-
-                            <option value="Food">
-                                🍔 Food
-                            </option>
-
-                            <option value="Transport">
-                                🚗 Transport
-                            </option>
-
-                            <option value="Bills">
-                                🧾 Bills
-                            </option>
-
-                            <option value="Shopping">
-                                🛍️ Shopping
-                            </option>
-
-                            <option value="Education">
-                                📚 Education
-                            </option>
-
-                            <option value="Entertainment">
-                                🎬 Entertainment
-                            </option>
-
-                            <option value="Health">
-                                ❤️ Health
-                            </option>
-
-                            <option value="Travel">
-                                ✈️ Travel
-                            </option>
-
-                            <option value="Other">
-                                📦 Other
-                            </option>
-
-                        </optgroup>
-
-
-                        <!-- Income Categories -->
-                        <optgroup
-                            label="Income Categories"
-                            id="incomeCategories">
-
-                            <option value="Salary">
-                                💼 Salary
-                            </option>
-
-                            <option value="Freelance">
-                                💻 Freelance
-                            </option>
-
-                            <option value="Business">
-                                🏢 Business
-                            </option>
-
-                            <option value="Scholarship">
-                                🎓 Scholarship
-                            </option>
-
-                            <option value="Gift">
-                                🎁 Gift
-                            </option>
-
-                            <option value="Other Income">
-                                💰 Other Income
-                            </option>
-
-                        </optgroup>
-
-                    </select>
-
+                    <label for="dateInput">Date*</label>
+                    <input type="date" id="dateInput" required>
                 </div>
 
-
-
-                <!-- Date -->
                 <div class="form-group">
-
-                    <label for="date">
-                        Date
-                    </label>
-
-                    <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        required>
-
+                    <label for="descriptionInput">Description*</label>
+                    <input type="text" id="descriptionInput" placeholder="e.g. Grocery Shopping" required>
                 </div>
 
-
-
-                <!-- Description -->
                 <div class="form-group">
-
-                    <label for="description">
-                        Description
-                    </label>
-
-                    <input
-                        type="text"
-                        id="description"
-                        name="description"
-                        placeholder="e.g. Lunch with friends"
-                        maxlength="100">
-
+                    <label for="notesInput">Notes (Optional)</label>
+                    <textarea id="notesInput" rows="2" placeholder="Add extra details..."></textarea>
                 </div>
 
-
-
-                <!-- Notes -->
-                <div class="form-group">
-
-                    <label for="notes">
-                        Notes
-                    </label>
-
-                    <textarea
-                        id="notes"
-                        name="notes"
-                        rows="3"
-                        placeholder="Add an optional note..."
-                        maxlength="250"></textarea>
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Transaction</button>
                 </div>
-
-
-
-                <!-- Form Actions -->
-                <div class="form-actions">
-
-                    <button
-                        type="button"
-                        class="cancel-btn"
-                        id="cancelModal">
-
-                        Cancel
-
-                    </button>
-
-
-                    <button
-                        type="submit"
-                        class="save-btn">
-
-                        Save Transaction
-
-                    </button>
-
-                </div>
-
             </form>
-
         </div>
-
     </div>
 
-
-
-    <!-- ========================================
-         DELETE CONFIRMATION MODAL
-    ========================================= -->
-
-    <div
-        class="modal-overlay"
-        id="deleteModal"
-        aria-hidden="true">
-
-
-        <div class="confirm-modal">
-
-            <div class="confirm-icon">
-                🗑️
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h3>Confirm Deletion</h3>
+                <button class="close-btn" id="closeDeleteModalBtn">&times;</button>
             </div>
-
-
-            <h2>
-                Delete Transaction?
-            </h2>
-
-            <p>
-                This transaction will be permanently removed.
-            </p>
-
-
-            <div class="confirm-actions">
-
-                <button
-                    type="button"
-                    class="cancel-btn"
-                    id="cancelDelete">
-
-                    Cancel
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="delete-btn"
-                    id="confirmDelete">
-
-                    Delete
-
-                </button>
-
+            <div class="modal-body">
+                <p>Are you sure you want to delete this transaction? This action cannot be undone.</p>
             </div>
-
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
         </div>
-
     </div>
 
-
-
-    <!-- ========================================
-         TOAST NOTIFICATION
-    ========================================= -->
-
-    <div
-        class="toast"
-        id="toast"
-        role="status"
-        aria-live="polite">
-
-        <span id="toastIcon">
-            ✓
-        </span>
-
-        <p id="toastMessage">
-            Transaction added successfully.
-        </p>
-
-    </div>
-
-
-
-    <!-- JavaScript -->
     <script src="js/script.js"></script>
-
 </body>
-
 </html>
