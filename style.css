@@ -1,7 +1,5 @@
-
-
 /* ========================================
-   DESIGN SYSTEM
+   1. ROOT VARIABLES
 ======================================== */
 
 :root {
@@ -12,6 +10,7 @@
 
     /* Cards */
     --card-bg: #1e293b;
+    --card-hover: #263449;
 
     /* Primary */
     --primary: #6366f1;
@@ -20,17 +19,20 @@
     /* Text */
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
+    --text-muted: #64748b;
 
     /* Status */
     --income: #22c55e;
     --expense: #ef4444;
+    --warning: #f59e0b;
 
     /* Border */
     --border: #334155;
 
     /* Typography */
-    --font-family: "Inter", sans-serif;
+    --font-family: "Inter", Arial, sans-serif;
 
+    --text-xs: 12px;
     --text-sm: 14px;
     --text-md: 16px;
     --text-lg: 20px;
@@ -58,7 +60,7 @@
 
 
 /* ========================================
-   GLOBAL RESET
+   2. RESET
 ======================================== */
 
 * {
@@ -67,23 +69,38 @@
     box-sizing: border-box;
 }
 
-
-/* ========================================
-   BODY
-======================================== */
+html {
+    scroll-behavior: smooth;
+}
 
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: var(--font-family);
+    line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
 }
 
 
 /* ========================================
-   NAVBAR
+   3. NAVBAR
 ======================================== */
 
-nav {
+.navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -91,83 +108,60 @@ nav {
     padding: 16px 40px;
 
     background-color: var(--bg-secondary);
-
     border-bottom: 1px solid var(--border);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 
-/* ========================================
-   NAV HEADER
-======================================== */
+/* Logo */
 
 .nav-header {
     display: flex;
     align-items: center;
 }
 
-
-/* ========================================
-   LOGO
-======================================== */
-
 .logo {
     display: flex;
     align-items: center;
-
     gap: 10px;
+
+    text-decoration: none;
 
     font-size: var(--text-lg);
     font-weight: 700;
-
-    color: var(--text-primary);
-
-    letter-spacing: -0.3px;
 }
 
-
-/* Logo Icon */
-
 .logo-icon {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     background-color: var(--primary);
-
     border-radius: var(--radius-sm);
 
     font-size: 20px;
-
-    box-shadow: var(--shadow-sm);
 }
 
 
-/* ========================================
-   NAV MENU
-======================================== */
+/* Navigation */
 
 .nav-menu {
     display: flex;
     align-items: center;
-
     gap: 24px;
 }
-
-
-/* ========================================
-   NAV LINKS
-======================================== */
 
 .nav-links {
     display: flex;
     align-items: center;
-
-    gap: 8px;
+    gap: 6px;
 }
-
 
 .nav-links a {
     text-decoration: none;
@@ -181,83 +175,45 @@ nav {
 
     border-radius: var(--radius-sm);
 
-    transition:
-        color 0.2s ease,
-        background-color 0.2s ease,
-        transform 0.2s ease;
+    transition: 0.2s ease;
 }
-
-
-/* Hover */
 
 .nav-links a:hover {
     color: var(--text-primary);
-
     background-color: var(--card-bg);
-
-    transform: translateY(-1px);
 }
-
-
-/* Active */
 
 .nav-links a.active {
     color: var(--text-primary);
-
     background-color: var(--primary);
 }
 
 
-/* ========================================
-   ADD TRANSACTION BUTTON
-======================================== */
+/* Add Button */
 
 .add-btn {
-    padding: 10px 16px;
-
     border: none;
+
+    padding: 10px 16px;
 
     border-radius: var(--radius-sm);
 
     background-color: var(--primary);
-
-    color: var(--text-primary);
+    color: white;
 
     font-size: var(--text-sm);
     font-weight: 600;
 
-    cursor: pointer;
-
-    box-shadow: var(--shadow-sm);
-
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: 0.2s ease;
 }
-
-
-/* Button Hover */
 
 .add-btn:hover {
     background-color: var(--primary-hover);
-
     transform: translateY(-1px);
-
-    box-shadow: var(--shadow-md);
 }
 
 
-/* Button Click */
-
-.add-btn:active {
-    transform: translateY(0);
-}
-
-
-/* ========================================
-   MOBILE MENU BUTTON
-======================================== */
+/* Hamburger */
 
 .menu-btn {
     display: none;
@@ -265,118 +221,165 @@ nav {
     width: 40px;
     height: 40px;
 
-    align-items: center;
-    justify-content: center;
-
-    flex-direction: column;
-
-    gap: 5px;
-
+    border: none;
     background: transparent;
 
-    border: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    cursor: pointer;
+    gap: 5px;
 }
 
-
-/* Hamburger Lines */
-
 .menu-btn span {
-    width: 22px;
+    width: 24px;
     height: 2px;
 
     background-color: var(--text-primary);
 
     border-radius: var(--radius-full);
 
-    transition:
-        transform 0.3s ease,
-        opacity 0.2s ease;
+    transition: 0.3s ease;
 }
+
+
+/* Hamburger → X */
+
+.menu-btn.menu-open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.menu-btn.menu-open span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-btn.menu-open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+
 /* ========================================
-   DASHBOARD
+   4. DASHBOARD
 ======================================== */
 
 .dashboard {
-    width: 100%;
-    max-width: 1200px;
+    width: min(1400px, 100%);
 
-    margin: 0 auto;
+    margin: auto;
 
-    padding: 40px;
+    padding: var(--space-2xl) 40px;
 }
-/* ========================================
-   DASHBOARD HEADER
-======================================== */
+
+
+/* Dashboard Header */
 
 .dashboard-header {
-    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: var(--space-xl);
 }
 
 .dashboard-header h1 {
     font-size: var(--text-2xl);
-    font-weight: 700;
-
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .dashboard-header p {
     color: var(--text-secondary);
-    font-size: var(--text-md);
+    font-size: var(--text-sm);
 }
+
+.current-date {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+}
+
+
 /* ========================================
-   SUMMARY CARDS
+   5. SUMMARY CARDS
 ======================================== */
 
 .summary-cards {
     display: grid;
 
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 
-    gap: 20px;
+    gap: var(--space-md);
 
-    margin-bottom: 32px;
+    margin-bottom: var(--space-xl);
 }
+
 .summary-card {
+    padding: var(--space-lg);
+
     background-color: var(--card-bg);
 
     border: 1px solid var(--border);
 
-    border-radius: var(--radius-lg);
-
-    padding: 24px;
+    border-radius: var(--radius-md);
 
     box-shadow: var(--shadow-sm);
 
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: 0.2s ease;
 }
+
 .summary-card:hover {
     transform: translateY(-2px);
-
-    box-shadow: var(--shadow-md);
+    background-color: var(--card-hover);
 }
-.card-label {
-    color: var(--text-secondary);
 
-    font-size: var(--text-sm);
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     margin-bottom: 12px;
 }
 
+.card-label {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+}
+
+.card-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-sm);
+}
+
+.balance-icon {
+    background: rgba(99, 102, 241, 0.12);
+}
+
+.income-icon {
+    background: rgba(34, 197, 94, 0.12);
+}
+
+.expense-icon {
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.savings-icon {
+    background: rgba(99, 102, 241, 0.12);
+}
+
 .summary-card h2 {
     font-size: var(--text-xl);
-
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .card-info {
-    color: var(--text-secondary);
-
-    font-size: var(--text-sm);
+    color: var(--text-muted);
+    font-size: var(--text-xs);
 }
+
 .income {
     color: var(--income);
 }
@@ -384,51 +387,65 @@ nav {
 .expense {
     color: var(--expense);
 }
+
+.savings {
+    color: var(--primary-hover);
+}
+
+
 /* ========================================
-   DASHBOARD CONTENT
+   6. DASHBOARD CONTENT
 ======================================== */
 
 .dashboard-content {
     display: grid;
 
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.3fr 1fr;
 
-    gap: 20px;
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-xl);
 }
+
 .overview-card,
 .transactions-card {
     background-color: var(--card-bg);
 
     border: 1px solid var(--border);
 
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
 
-    padding: 24px;
+    padding: var(--space-lg);
 
     box-shadow: var(--shadow-sm);
 }
+
+
+/* Section Header */
+
 .section-header {
     display: flex;
-
+    justify-content: space-between;
     align-items: center;
 
-    justify-content: space-between;
+    gap: 16px;
 
-    margin-bottom: 24px;
+    margin-bottom: var(--space-lg);
 }
 
 .section-header h2 {
     font-size: var(--text-lg);
-
-    margin-bottom: 4px;
 }
 
 .section-header p {
     color: var(--text-secondary);
-
     font-size: var(--text-sm);
+    margin-top: 2px;
 }
+
 .section-header select {
+    padding: 8px 12px;
+
     background-color: var(--bg-secondary);
 
     color: var(--text-primary);
@@ -437,44 +454,103 @@ nav {
 
     border-radius: var(--radius-sm);
 
-    padding: 8px 12px;
-
     outline: none;
-
-    cursor: pointer;
 }
-.chart-placeholder {
-    min-height: 280px;
 
+
+/* ========================================
+   7. EXPENSE OVERVIEW
+======================================== */
+
+.category-overview {
     display: flex;
+    flex-direction: column;
 
-    align-items: center;
+    gap: 14px;
+}
 
-    justify-content: center;
+.category-item {
+    display: flex;
+    flex-direction: column;
 
-    border: 1px dashed var(--border);
+    gap: 7px;
+}
 
-    border-radius: var(--radius-md);
+.category-header {
+    display: flex;
+    justify-content: space-between;
 
+    font-size: var(--text-sm);
+}
+
+.category-header span {
     color: var(--text-secondary);
 }
+
+.category-header strong {
+    color: var(--text-primary);
+}
+
+.category-track {
+    width: 100%;
+    height: 7px;
+
+    background-color: var(--bg-secondary);
+
+    border-radius: var(--radius-full);
+
+    overflow: hidden;
+}
+
+.category-bar {
+    height: 100%;
+
+    width: 0%;
+
+    background-color: var(--primary);
+
+    border-radius: var(--radius-full);
+
+    transition: width 0.5s ease;
+}
+
+
+/* ========================================
+   8. TRANSACTIONS
+======================================== */
+
+.transactions-list,
+.all-transactions-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
 .transaction {
     display: flex;
-
     align-items: center;
 
     gap: 12px;
 
-    padding: 14px 0;
+    padding: 12px;
 
-    border-bottom: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+
+    transition: 0.2s ease;
 }
+
+.transaction:hover {
+    background-color: var(--bg-secondary);
+}
+
 .transaction-icon {
     width: 40px;
     height: 40px;
 
-    display: flex;
+    flex-shrink: 0;
 
+    display: flex;
     align-items: center;
     justify-content: center;
 
@@ -484,99 +560,900 @@ nav {
 
     font-size: 18px;
 }
+
 .transaction-info {
     flex: 1;
 }
 
 .transaction-info h3 {
     font-size: var(--text-sm);
-
-    font-weight: 600;
-
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .transaction-info p {
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+}
+
+.transaction-amount {
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.transaction-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.edit-btn,
+.delete-btn {
+    border: none;
+
+    padding: 7px 9px;
+
+    border-radius: var(--radius-sm);
+
+    background-color: var(--bg-secondary);
+
     color: var(--text-secondary);
 
     font-size: 12px;
+
+    transition: 0.2s ease;
 }
-.transaction-amount {
+
+.edit-btn:hover {
+    color: var(--primary-hover);
+}
+
+.delete-btn:hover {
+    color: var(--expense);
+}
+
+
+/* View All */
+
+.view-all-btn {
+    border: none;
+
+    background: transparent;
+
+    color: var(--primary-hover);
+
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+.view-all-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* ========================================
+   9. EMPTY STATE
+======================================== */
+
+.empty-state {
+    min-height: 150px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    text-align: center;
+
+    color: var(--text-secondary);
+}
+
+.empty-state span {
+    font-size: 28px;
+    margin-bottom: 4px;
+}
+
+.empty-state p {
+    font-size: var(--text-sm);
+}
+
+.empty-state small {
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+}
+
+
+/* ========================================
+   10. ALL TRANSACTIONS
+======================================== */
+
+.all-transactions-section {
+    padding: var(--space-lg);
+
+    margin-bottom: var(--space-xl);
+
+    background-color: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+}
+
+.transaction-controls {
+    display: grid;
+
+    grid-template-columns: 1fr auto auto auto;
+
+    gap: 10px;
+
+    margin-bottom: var(--space-lg);
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0 12px;
+
+    background-color: var(--bg-secondary);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-sm);
+}
+
+.search-box input {
+    width: 100%;
+
+    padding: 10px 0;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: var(--text-primary);
+
+    font-size: var(--text-sm);
+}
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+.transaction-controls select {
+    min-width: 130px;
+
+    padding: 10px 12px;
+
+    background-color: var(--bg-secondary);
+
+    color: var(--text-primary);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-sm);
+
+    outline: none;
+}
+
+
+/* ========================================
+   11. REPORTS
+======================================== */
+
+.reports-section {
+    margin-top: var(--space-xl);
+}
+
+
+/* Reports Header */
+
+.reports-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 20px;
+
+    margin-bottom: var(--space-md);
+}
+
+.reports-header h2 {
+    font-size: var(--text-lg);
+    margin-bottom: 4px;
+}
+
+.reports-header p {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+}
+
+
+/* Report Filters */
+
+.report-filters {
+    display: flex;
+    gap: 8px;
+}
+
+.report-filters select {
+    padding: 9px 12px;
+
+    background-color: var(--card-bg);
+
+    color: var(--text-primary);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-sm);
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+
+/* Report Summary */
+
+.report-summary {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: var(--space-md);
+
+    margin-bottom: var(--space-md);
+}
+
+.report-card {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: var(--space-md);
+
+    background-color: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+}
+
+.report-card p {
+    color: var(--text-secondary);
+
+    font-size: var(--text-sm);
+
+    margin-bottom: 3px;
+}
+
+.report-card h3 {
+    font-size: var(--text-md);
+}
+
+
+/* ========================================
+   12. ANALYTICS
+======================================== */
+
+.analytics-content {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: var(--space-md);
+}
+
+.analytics-card {
+    padding: var(--space-lg);
+
+    background-color: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+}
+
+.analytics-card-header {
+    margin-bottom: var(--space-lg);
+}
+
+.analytics-card-header h3 {
+    font-size: var(--text-md);
+
+    margin-bottom: 3px;
+}
+
+.analytics-card-header p {
+    color: var(--text-secondary);
+
+    font-size: var(--text-sm);
+}
+
+
+/* Income Expense */
+
+.income-expense-chart {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.chart-item {
+    width: 100%;
+}
+
+.chart-label {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: var(--text-sm);
+}
+
+.chart-label span {
+    color: var(--text-secondary);
+}
+
+.chart-track {
+    width: 100%;
+    height: 8px;
+
+    background-color: var(--bg-secondary);
+
+    border-radius: var(--radius-full);
+
+    overflow: hidden;
+}
+
+.chart-bar {
+    height: 100%;
+
+    width: 0%;
+
+    border-radius: var(--radius-full);
+
+    transition: width 0.5s ease;
+}
+
+.income-bar {
+    background-color: var(--income);
+}
+
+.expense-bar {
+    background-color: var(--expense);
+}
+
+
+/* ========================================
+   13. DAILY SPENDING
+======================================== */
+
+.daily-spending {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.daily-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 12px;
+
+    background-color: var(--bg-secondary);
+
+    border-radius: var(--radius-sm);
+}
+
+.daily-item span {
+    color: var(--text-secondary);
+
+    font-size: var(--text-sm);
+}
+
+.daily-item strong {
+    color: var(--expense);
+
+    font-size: var(--text-sm);
+}
+
+
+/* ========================================
+   14. SMART INSIGHTS
+======================================== */
+
+.financial-insights {
+    margin-top: var(--space-md);
+}
+
+.insights-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.insight-item {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    background-color: var(--bg-secondary);
+
+    border-radius: var(--radius-sm);
+}
+
+.insight-item span {
+    font-size: 18px;
+}
+
+.insight-item p {
+    color: var(--text-secondary);
+
+    font-size: var(--text-sm);
+}
+
+
+/* ========================================
+   15. MODAL OVERLAY
+======================================== */
+
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+
+/* ========================================
+   16. TRANSACTION MODAL
+======================================== */
+
+.transaction-modal {
+    width: min(500px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: var(--space-lg);
+
+    background-color: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-md);
+}
+
+.modal-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-start;
+
+    margin-bottom: var(--space-lg);
+}
+
+.modal-header h2 {
+    font-size: var(--text-lg);
+}
+
+.modal-header p {
+    color: var(--text-secondary);
+
+    font-size: var(--text-sm);
+
+    margin-top: 3px;
+}
+
+.close-modal {
+    width: 34px;
+    height: 34px;
+
+    border: none;
+
+    background-color: var(--bg-secondary);
+
+    color: var(--text-secondary);
+
+    border-radius: var(--radius-sm);
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    transition: 0.2s ease;
+}
+
+.close-modal:hover {
+    color: var(--text-primary);
+}
+
+
+/* ========================================
+   17. FORM
+======================================== */
+
+.form-group {
+    margin-bottom: var(--space-md);
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--text-secondary);
+
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    background-color: var(--bg-secondary);
+
+    color: var(--text-primary);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-sm);
+
+    outline: none;
+
+    resize: vertical;
+
+    transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary);
+}
+
+
+/* Amount */
+
+.amount-input {
+    display: flex;
+    align-items: center;
+
+    background-color: var(--bg-secondary);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-sm);
+
+    padding-left: 12px;
+}
+
+.amount-input span {
+    color: var(--text-secondary);
+
+    font-weight: 600;
+}
+
+.amount-input input {
+    border: none;
+    background: transparent;
+}
+
+
+/* Transaction Type */
+
+.transaction-type {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+}
+
+.type-btn {
+    padding: 11px;
+
+    border: 1px solid var(--border);
+
+    background-color: var(--bg-secondary);
+
+    color: var(--text-secondary);
+
+    border-radius: var(--radius-sm);
+
+    transition: 0.2s ease;
+}
+
+.type-btn.active {
+    border-color: var(--primary);
+
+    background-color: rgba(99, 102, 241, 0.15);
+
+    color: var(--text-primary);
+}
+
+
+/* Form Actions */
+
+.form-actions,
+.confirm-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: var(--space-lg);
+}
+
+.cancel-btn,
+.save-btn {
+    padding: 10px 16px;
+
+    border-radius: var(--radius-sm);
+
     font-size: var(--text-sm);
 
     font-weight: 600;
 }
-/* add transaction modal */
 
+.cancel-btn {
+    border: 1px solid var(--border);
+
+    background-color: transparent;
+
+    color: var(--text-secondary);
+}
+
+.cancel-btn:hover {
+    color: var(--text-primary);
+
+    background-color: var(--bg-secondary);
+}
+
+.save-btn {
+    border: none;
+
+    background-color: var(--primary);
+
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: var(--primary-hover);
+}
 
 
 /* ========================================
-   MOBILE RESPONSIVE
+   18. DELETE MODAL
 ======================================== */
+
+.confirm-modal {
+    width: min(400px, 100%);
+
+    padding: var(--space-xl);
+
+    text-align: center;
+
+    background-color: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-md);
+}
+
+.confirm-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 16px;
+
+    background-color: rgba(239, 68, 68, 0.12);
+
+    border-radius: var(--radius-full);
+
+    font-size: 22px;
+}
+
+.confirm-modal h2 {
+    font-size: var(--text-lg);
+
+    margin-bottom: 6px;
+}
+
+.confirm-modal p {
+    color: var(--text-secondary);
+
+    font-size: var(--text-sm);
+}
+
+
+/* Delete button */
+
+.confirm-actions .delete-btn {
+    padding: 10px 16px;
+
+    background-color: var(--expense);
+
+    color: white;
+
+    border: none;
+
+    font-weight: 600;
+}
+
+.confirm-actions .delete-btn:hover {
+    opacity: 0.9;
+}
+
+
+/* ========================================
+   19. TOAST
+======================================== */
+
+.toast {
+    position: fixed;
+
+    right: 24px;
+    bottom: 24px;
+
+    z-index: 3000;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 16px;
+
+    background-color: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-md);
+
+    transform: translateY(120px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: 0.3s ease;
+}
+
+.toast.show {
+    transform: translateY(0);
+
+    opacity: 1;
+}
+
+.toast span {
+    color: var(--income);
+
+    font-weight: bold;
+}
+
+.toast p {
+    font-size: var(--text-sm);
+
+    color: var(--text-primary);
+}
+
+
+/* ========================================
+   20. MOBILE RESPONSIVE
+======================================== */
+
+@media (max-width: 1000px) {
+
+    .summary-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+
+    .report-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .transaction-controls {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .search-box {
+        grid-column: 1 / -1;
+    }
+}
+
+
 @media (max-width: 768px) {
 
-    /* ========================================
-       NAVBAR
-    ======================================== */
+    /* Navbar */
 
-    nav {
+    .navbar {
         flex-direction: column;
+
         align-items: stretch;
+
         padding: 14px 20px;
     }
 
-
-    /* ========================================
-       LOGO + MENU BUTTON
-    ======================================== */
-
     .nav-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         width: 100%;
+
+        justify-content: space-between;
     }
-
-
-    /* ========================================
-       HAMBURGER BUTTON
-    ======================================== */
 
     .menu-btn {
         display: flex;
     }
 
-
-    /* ========================================
-       NAVIGATION MENU
-    ======================================== */
-
     .nav-menu {
         display: none;
 
         flex-direction: column;
+
         align-items: stretch;
 
         width: 100%;
 
-        gap: 16px;
+        gap: 12px;
 
         margin-top: 16px;
     }
 
-
-    /* ========================================
-       OPEN MENU
-    ======================================== */
-
     .nav-menu.menu-open {
         display: flex;
     }
-
-
-    /* ========================================
-       NAV LINKS
-    ======================================== */
 
     .nav-links {
         flex-direction: column;
@@ -588,602 +1465,188 @@ nav {
         gap: 4px;
     }
 
-
     .nav-links a {
         width: 100%;
 
         text-align: center;
     }
 
-
-    /* ========================================
-       ADD TRANSACTION BUTTON
-    ======================================== */
-
     .add-btn {
         width: 100%;
     }
 
 
-    /* ========================================
-       HAMBURGER → X
-    ======================================== */
-
-    .menu-btn.menu-open span:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
-    }
-
-    .menu-btn.menu-open span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .menu-btn.menu-open span:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
-    }
-
-
-    /* ========================================
-       DASHBOARD MOBILE
-    ======================================== */
+    /* Dashboard */
 
     .dashboard {
         padding: 24px 20px;
     }
 
-
     .dashboard-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+
         margin-bottom: 24px;
     }
-
 
     .dashboard-header h1 {
         font-size: var(--text-xl);
     }
 
 
+    /* Summary */
+
     .summary-cards {
         grid-template-columns: 1fr;
+
         gap: 12px;
     }
 
 
-    .dashboard-content {
+    /* Cards */
+
+    .overview-card,
+    .transactions-card,
+    .all-transactions-section,
+    .analytics-card {
+        padding: 16px;
+    }
+
+
+    /* Section Header */
+
+    .section-header {
+        align-items: flex-start;
+    }
+
+
+    /* All Transactions */
+
+    .transaction-controls {
         grid-template-columns: 1fr;
-        gap: 16px;
     }
 
-}
-/* ========================================
-   ADD TRANSACTION MODAL
-======================================== */
-
-.modal-overlay {
-    display: none;
-
-    position: fixed;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.65);
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    z-index: 1000;
-}
-.modal-overlay.show {
-    display: flex;
-}
-
-
-.transaction-modal {
-    width: 100%;
-    max-width: 500px;
-
-    background: var(--card-bg);
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius-lg);
-
-    padding: var(--space-xl);
-
-    box-shadow: var(--shadow-md);
-}
-
-
-/* ========================================
-   MODAL HEADER
-======================================== */
-
-.modal-header {
-    display: flex;
-
-    align-items: flex-start;
-
-    justify-content: space-between;
-
-    gap: var(--space-md);
-
-    margin-bottom: var(--space-lg);
-}
-
-
-.modal-header h2 {
-    font-size: var(--text-xl);
-
-    color: var(--text-primary);
-
-    margin-bottom: var(--space-xs);
-}
-
-
-.modal-header p {
-    font-size: var(--text-sm);
-
-    color: var(--text-secondary);
-}
-
-
-/* ========================================
-   CLOSE BUTTON
-======================================== */
-
-.close-modal {
-    width: 36px;
-    height: 36px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border: none;
-
-    border-radius: var(--radius-sm);
-
-    background: transparent;
-
-    color: var(--text-secondary);
-
-    font-size: 24px;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-}
-
-
-.close-modal:hover {
-    background: var(--bg-secondary);
-
-    color: var(--text-primary);
-}
-
-
-/* ========================================
-   EXPENSE / INCOME TOGGLE
-======================================== */
-
-.transaction-type {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 8px;
-
-    padding: 4px;
-
-    margin-bottom: var(--space-lg);
-
-    background: var(--bg-secondary);
-
-    border-radius: var(--radius-md);
-}
-
-
-.type-btn {
-    padding: 10px;
-
-    border: none;
-
-    border-radius: var(--radius-sm);
-
-    background: transparent;
-
-    color: var(--text-secondary);
-
-    font-size: var(--text-sm);
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-}
-
-
-.type-btn.active {
-    background: var(--primary);
-
-    color: var(--text-primary);
-}
-
-
-/* ========================================
-   FORM
-======================================== */
-
-#transactionForm {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: var(--space-md);
-}
-
-
-.form-group {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: var(--space-sm);
-}
-
-
-.form-group label {
-    font-size: var(--text-sm);
-
-    font-weight: 500;
-
-    color: var(--text-primary);
-}
-
-
-/* ========================================
-   INPUTS
-======================================== */
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-
-    padding: 12px 14px;
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius-sm);
-
-    background: var(--bg-secondary);
-
-    color: var(--text-primary);
-
-    font-family: inherit;
-
-    font-size: var(--text-sm);
-
-    outline: none;
-
-    transition: border-color 0.2s ease;
-}
-
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: var(--primary);
-}
-
-
-.form-group textarea {
-    resize: vertical;
-
-    min-height: 90px;
-}
-
-
-/* ========================================
-   AMOUNT INPUT
-======================================== */
-
-.amount-input {
-    display: flex;
-
-    align-items: center;
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius-sm);
-
-    background: var(--bg-secondary);
-
-    overflow: hidden;
-}
-
-
-.amount-input span {
-    padding-left: 14px;
-
-    color: var(--text-secondary);
-
-    font-size: var(--text-md);
-
-    font-weight: 600;
-}
-
-
-.amount-input input {
-    border: none;
-
-    background: transparent;
-
-    flex: 1;
-}
-
-
-.amount-input:focus-within {
-    border-color: var(--primary);
-}
-
-
-/* ========================================
-   SUBMIT BUTTON
-======================================== */
-
-.submit-transaction {
-    width: 100%;
-
-    padding: 12px 16px;
-
-    margin-top: var(--space-sm);
-
-    border: none;
-
-    border-radius: var(--radius-sm);
-
-    background: var(--primary);
-
-    color: var(--text-primary);
-
-    font-size: var(--text-sm);
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-}
-
-
-.submit-transaction:hover {
-    background: var(--primary-hover);
-
-    transform: translateY(-1px);
-}
-
-
-/* ========================================
-   MOBILE MODAL
-======================================== */
-
-@media (max-width: 768px) {
-
-    .transaction-modal {
-        max-width: 100%;
-
-        padding: 20px;
-
-        border-radius: var(--radius-md);
+    .search-box {
+        grid-column: auto;
     }
 
-}
+    .transaction-controls select {
+        width: 100%;
+    }
 
 
-@media (max-width: 480px) {
+    /* Reports */
+
+    .reports-header {
+        flex-direction: column;
+    }
+
+    .report-filters {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr;
+    }
+
+    .report-filters select {
+        width: 100%;
+    }
+
+    .report-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .analytics-content {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Transactions */
+
+    .transaction {
+        align-items: flex-start;
+    }
+
+    .transaction-amount {
+        margin-left: auto;
+    }
+
+    .transaction-actions {
+        flex-direction: column;
+    }
+
+
+    /* Modal */
 
     .modal-overlay {
         padding: 12px;
     }
 
-
     .transaction-modal {
         padding: 16px;
+
+        max-height: 92vh;
     }
 
 
-    .modal-header h2 {
+    /* Toast */
+
+    .toast {
+        left: 16px;
+
+        right: 16px;
+
+        bottom: 16px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .logo {
+        font-size: var(--text-md);
+    }
+
+    .logo-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .summary-card h2 {
         font-size: var(--text-lg);
     }
 
-}
-/* ========================================
-   ALL TRANSACTIONS MODAL
-======================================== */
+    .section-header h2 {
+        font-size: var(--text-md);
+    }
 
-.all-transactions-modal {
-    display: none;
+    .transaction-info {
+        min-width: 0;
+    }
 
-    position: fixed;
-    inset: 0;
+    .transaction-info h3 {
+        white-space: nowrap;
 
-    background: rgba(0, 0, 0, 0.7);
+        overflow: hidden;
 
-    align-items: center;
-    justify-content: center;
+        text-overflow: ellipsis;
+    }
 
-    padding: 20px;
+    .transaction-amount {
+        font-size: 13px;
+    }
 
-    z-index: 1100;
-}
+    .form-actions,
+    .confirm-actions {
+        flex-direction: column;
+    }
 
-
-.all-transactions-modal.show {
-    display: flex;
-}
-
-
-.all-transactions-content {
-    width: 100%;
-    max-width: 700px;
-
-    max-height: 80vh;
-
-    overflow-y: auto;
-
-    background: var(--card-bg);
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius-lg);
-
-    padding: var(--space-xl);
-}
-
-
-#closeAllTransactions {
-    border: none;
-
-    background: transparent;
-
-    color: var(--text-secondary);
-
-    font-size: 28px;
-
-    cursor: pointer;
-}
-
-
-#closeAllTransactions:hover {
-    color: var(--text-primary);
-}
-/* ========================================
-   TRANSACTION ACTIONS
-======================================== */
-/* ========================================
-   TRANSACTION ACTION BUTTONS
-======================================== */
-
-.transaction {
-    display: flex;
-    align-items: center;
-}
-
-.transaction-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: auto;
-}
-
-.transaction-actions button {
-    width: 34px;
-    height: 34px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-
-    background: transparent;
-    cursor: pointer;
-
-    font-size: 14px;
-
-    transition: all 0.2s ease;
-}
-
-.transaction-actions button:hover {
-    background-color: var(--border);
-    transform: translateY(-1px);
-}
-
-.delete-btn:hover {
-    border-color: var(--expense) !important;
-}
-
-.edit-btn:hover {
-    border-color: var(--primary) !important;
-}
-.transaction-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: 12px;
-}
-
-.transaction-actions button {
-    width: 32px;
-    height: 32px;
-
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-
-    background: transparent;
-    color: var(--text-secondary);
-
-    cursor: pointer;
-
-    transition: 0.2s ease;
-}
-
-.transaction-actions button:hover {
-    background: var(--card-bg);
-    color: var(--text-primary);
-}
-
-.delete-btn:hover {
-    color: var(--expense) !important;
-}
-/* ========================================
-   TRANSACTION ACTIONS
-======================================== */
-
-.transaction {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.transaction-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: auto;
-}
-
-.transaction-actions button {
-    width: 34px;
-    height: 34px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-
-    background: transparent;
-    cursor: pointer;
-
-    font-size: 14px;
-
-    transition: all 0.2s ease;
-}
-
-.transaction-actions button:hover {
-    background-color: var(--border);
-    transform: translateY(-1px);
-}
-
-.delete-btn:hover {
-    border-color: var(--expense) !important;
-}
-
-.edit-btn:hover {
-    border-color: var(--primary) !important;
+    .form-actions button,
+    .confirm-actions button {
+        width: 100%;
+    }
 }

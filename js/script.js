@@ -1,111 +1,267 @@
 // ========================================
-// EXPENSEFLOW - MAIN JAVASCRIPT
+// EXPENSEFLOW - FINAL JAVASCRIPT
 // ========================================
 
 
 // ========================================
-// NAVBAR MOBILE MENU
+// 1. SELECT ELEMENTS
 // ========================================
 
-const menuBtn = document.querySelector(".menu-btn");
-const navMenu = document.querySelector(".nav-menu");
-
-menuBtn?.addEventListener("click", () => {
-    navMenu?.classList.toggle("menu-open");
-    menuBtn?.classList.toggle("menu-open");
-});
-
-
-// ========================================
-// DYNAMIC GREETING
-// ========================================
+const menuBtn = document.querySelector("#menuBtn");
+const navMenu = document.querySelector("#navMenu");
 
 const greeting = document.querySelector("#greeting");
+const currentDate = document.querySelector("#currentDate");
 
-if (greeting) {
+const addTransactionBtn =
+    document.querySelector("#addTransactionBtn");
 
-    const hour = new Date().getHours();
+const transactionModal =
+    document.querySelector("#transactionModal");
 
-    if (hour < 12) {
+const closeModal =
+    document.querySelector("#closeModal");
 
-        greeting.textContent = "Good Morning 👋";
+const cancelModal =
+    document.querySelector("#cancelModal");
 
-    } else if (hour < 17) {
+const transactionForm =
+    document.querySelector("#transactionForm");
 
-        greeting.textContent = "Good Afternoon ☀️";
+const transactionType =
+    document.querySelector("#transactionType");
+
+const typeButtons =
+    document.querySelectorAll(".type-btn");
+
+const amountInput =
+    document.querySelector("#amount");
+
+const categoryInput =
+    document.querySelector("#category");
+
+const dateInput =
+    document.querySelector("#date");
+
+const descriptionInput =
+    document.querySelector("#description");
+
+const notesInput =
+    document.querySelector("#notes");
+
+const totalBalance =
+    document.querySelector("#totalBalance");
+
+const totalIncome =
+    document.querySelector("#totalIncome");
+
+const totalExpense =
+    document.querySelector("#totalExpense");
+
+const totalSavings =
+    document.querySelector("#totalSavings");
+
+const recentTransactions =
+    document.querySelector("#recentTransactions");
+
+const allTransactions =
+    document.querySelector("#allTransactions");
+
+const viewAllBtn =
+    document.querySelector("#viewAllBtn");
+
+const allTransactionsSection =
+    document.querySelector("#allTransactionsSection");
+
+const searchTransaction =
+    document.querySelector("#searchTransaction");
+
+const typeFilter =
+    document.querySelector("#typeFilter");
+
+const categoryFilter =
+    document.querySelector("#categoryFilter");
+
+const dateFilter =
+    document.querySelector("#dateFilter");
+
+const overviewFilter =
+    document.querySelector("#overviewFilter");
+
+const categoryOverview =
+    document.querySelector("#categoryOverview");
+
+
+// Reports
+
+const reportFilter =
+    document.querySelector("#reportFilter");
+
+const monthFilter =
+    document.querySelector("#monthFilter");
+
+const yearFilter =
+    document.querySelector("#yearFilter");
+
+const reportIncome =
+    document.querySelector("#reportIncome");
+
+const reportExpense =
+    document.querySelector("#reportExpense");
+
+const reportSavings =
+    document.querySelector("#reportSavings");
+
+const reportTransactionCount =
+    document.querySelector("#reportTransactionCount");
+
+const chartIncome =
+    document.querySelector("#chartIncome");
+
+const chartExpense =
+    document.querySelector("#chartExpense");
+
+const incomeBar =
+    document.querySelector("#incomeBar");
+
+const expenseBar =
+    document.querySelector("#expenseBar");
+
+const dailySpending =
+    document.querySelector("#dailySpending");
+
+const insightsList =
+    document.querySelector("#insightsList");
+
+
+// Delete Modal
+
+const deleteModal =
+    document.querySelector("#deleteModal");
+
+const cancelDelete =
+    document.querySelector("#cancelDelete");
+
+const confirmDelete =
+    document.querySelector("#confirmDelete");
+
+
+// Toast
+
+const toast =
+    document.querySelector("#toast");
+
+const toastMessage =
+    document.querySelector("#toastMessage");
+
+
+// ========================================
+// 2. APPLICATION STATE
+// ========================================
+
+let transactions = [];
+
+let editingTransactionId = null;
+
+let deletingTransactionId = null;
+
+
+// ========================================
+// 3. LOAD DATA FROM LOCAL STORAGE
+// ========================================
+
+function loadTransactions() {
+
+    const savedTransactions =
+        localStorage.getItem("expenseflow_transactions");
+
+    if (savedTransactions) {
+
+        try {
+
+            transactions =
+                JSON.parse(savedTransactions);
+
+        } catch (error) {
+
+            console.error(
+                "Could not load transactions:",
+                error
+            );
+
+            transactions = [];
+        }
 
     } else {
 
-        greeting.textContent = "Good Evening 🌙";
+        transactions = [];
 
     }
 }
 
 
 // ========================================
-// TRANSACTION MODAL
+// 4. SAVE DATA
 // ========================================
 
-const transactionModal =
-    document.querySelector("#transactionModal");
+function saveTransactions() {
 
-const addBtn =
-    document.querySelector(".add-btn");
-
-const closeModalBtn =
-    document.querySelector("#closeModal");
-
-const transactionForm =
-    document.querySelector("#transactionForm");
-
-const dateInput =
-    document.querySelector("#date");
-
-const amountInput =
-    document.querySelector("#amount");
-
-const categorySelect =
-    document.querySelector("#category");
-
-const descriptionInput =
-    document.querySelector("#description");
-
-const typeButtons =
-    document.querySelectorAll(".type-btn");
-
-
-// ========================================
-// EDITING STATE
-// ========================================
-
-// null = Add mode
-// transaction ID = Edit mode
-
-let editingTransactionId = null;
-
-
-// ========================================
-// MODAL TITLE / SUBMIT BUTTON
-// ========================================
-
-const modalTitle =
-    document.querySelector("#modalTitle") ||
-    document.querySelector(".modal-header h2") ||
-    document.querySelector("#transactionModal h2");
-
-const submitButton =
-    transactionForm?.querySelector(
-        'button[type="submit"]'
+    localStorage.setItem(
+        "expenseflow_transactions",
+        JSON.stringify(transactions)
     );
+}
 
 
 // ========================================
-// SET TODAY'S DATE
+// 5. FORMAT MONEY
 // ========================================
 
-const setDefaultDate = () => {
+function formatMoney(amount) {
 
-    if (!dateInput) return;
+    return new Intl.NumberFormat("en-IN", {
+
+        style: "currency",
+
+        currency: "INR",
+
+        maximumFractionDigits: 0
+
+    }).format(amount);
+
+}
+
+
+// ========================================
+// 6. FORMAT DATE
+// ========================================
+
+function formatDate(dateString) {
+
+    if (!dateString) {
+        return "";
+    }
+
+    const date = new Date(dateString + "T00:00:00");
+
+    return date.toLocaleDateString("en-IN", {
+
+        day: "2-digit",
+
+        month: "short",
+
+        year: "numeric"
+
+    });
+
+}
+
+
+// ========================================
+// 7. GET TODAY DATE
+// ========================================
+
+function getTodayString() {
 
     const today = new Date();
 
@@ -120,89 +276,312 @@ const setDefaultDate = () => {
         String(today.getDate())
             .padStart(2, "0");
 
-    dateInput.value =
-        `${year}-${month}-${day}`;
-};
+    return `${year}-${month}-${day}`;
+}
 
 
 // ========================================
-// EXPENSE CATEGORIES
+// 8. DEFAULT DATE
 // ========================================
 
-const expenseCategories = [
+function setDefaultDate() {
 
-    "Food",
-    "Shopping",
-    "Transport",
-    "Bills & Utilities",
-    "Health",
-    "Education",
-    "Entertainment",
-    "Travel",
-    "Rent",
-    "Other"
+    if (dateInput) {
 
-];
+        dateInput.value =
+            getTodayString();
+
+    }
+}
 
 
 // ========================================
-// INCOME CATEGORIES
+// 9. GREETING
 // ========================================
 
-const incomeCategories = [
+function updateGreeting() {
 
-    "Salary",
-    "Freelance",
-    "Business",
-    "Investment",
-    "Bonus",
-    "Gift",
-    "Interest",
-    "Other"
+    if (!greeting) {
+        return;
+    }
 
-];
+    const hour =
+        new Date().getHours();
+
+    if (hour < 12) {
+
+        greeting.textContent =
+            "Good Morning 👋";
+
+    } else if (hour < 17) {
+
+        greeting.textContent =
+            "Good Afternoon ☀️";
+
+    } else {
+
+        greeting.textContent =
+            "Good Evening 🌙";
+
+    }
+}
 
 
 // ========================================
-// UPDATE CATEGORIES
+// 10. CURRENT DATE
 // ========================================
 
-const updateCategories = (type) => {
+function updateCurrentDate() {
 
-    if (!categorySelect) return;
+    if (!currentDate) {
+        return;
+    }
 
-    const categories =
-        type === "income"
-            ? incomeCategories
-            : expenseCategories;
+    const today = new Date();
 
-    categorySelect.innerHTML =
-        '<option value="">Select category</option>';
+    currentDate.textContent =
+        today.toLocaleDateString("en-IN", {
 
-    categories.forEach((category) => {
+            weekday: "long",
 
-        const option =
-            document.createElement("option");
+            day: "numeric",
 
-        option.value =
-            category.toLowerCase();
+            month: "long",
 
-        option.textContent =
-            category;
+            year: "numeric"
 
-        categorySelect.appendChild(option);
+        });
+}
+
+
+// ========================================
+// 11. MOBILE MENU
+// ========================================
+
+menuBtn?.addEventListener("click", () => {
+
+    navMenu?.classList.toggle("menu-open");
+
+    menuBtn?.classList.toggle("menu-open");
+
+    const isOpen =
+        navMenu?.classList.contains("menu-open");
+
+    menuBtn?.setAttribute(
+        "aria-expanded",
+        isOpen ? "true" : "false"
+    );
+
+});
+
+
+// Close mobile menu after clicking link
+
+document
+    .querySelectorAll(".nav-links a")
+    .forEach(link => {
+
+        link.addEventListener("click", () => {
+
+            navMenu?.classList.remove("menu-open");
+
+            menuBtn?.classList.remove("menu-open");
+
+            menuBtn?.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        });
 
     });
-};
 
 
 // ========================================
-// SELECT TRANSACTION TYPE
+// 12. OPEN MODAL
 // ========================================
 
-const setTransactionType = (type) => {
+function openTransactionModal(transaction = null) {
 
-    typeButtons.forEach((button) => {
+    if (!transactionModal) {
+        return;
+    }
+
+    transactionModal.classList.add("show");
+
+    transactionModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    if (transaction) {
+
+        // EDIT MODE
+
+        editingTransactionId =
+            transaction.id;
+
+        document.querySelector("#modalTitle")
+            .textContent =
+            "Edit Transaction";
+
+        amountInput.value =
+            transaction.amount;
+
+        dateInput.value =
+            transaction.date;
+
+        descriptionInput.value =
+            transaction.description || "";
+
+        notesInput.value =
+            transaction.notes || "";
+
+        setTransactionType(
+            transaction.type
+        );
+
+        setCategoryForType(
+            transaction.type,
+            transaction.category
+        );
+
+    } else {
+
+        // ADD MODE
+
+        editingTransactionId = null;
+
+        document.querySelector("#modalTitle")
+            .textContent =
+            "Add Transaction";
+
+        transactionForm?.reset();
+
+        setTransactionType("expense");
+
+        setDefaultDate();
+
+    }
+
+}
+
+
+// ========================================
+// 13. CLOSE MODAL
+// ========================================
+
+function closeTransactionModal() {
+
+    transactionModal?.classList.remove("show");
+
+    transactionModal?.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    transactionForm?.reset();
+
+    editingTransactionId = null;
+
+    setTransactionType("expense");
+
+    setDefaultDate();
+
+}
+
+
+// Add button
+
+addTransactionBtn?.addEventListener(
+    "click",
+    () => {
+
+        openTransactionModal();
+
+    }
+);
+
+
+// Close button
+
+closeModal?.addEventListener(
+    "click",
+    closeTransactionModal
+);
+
+
+// Cancel button
+
+cancelModal?.addEventListener(
+    "click",
+    closeTransactionModal
+);
+
+
+// Click outside modal
+
+transactionModal?.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target === transactionModal
+        ) {
+
+            closeTransactionModal();
+
+        }
+
+    }
+);
+
+
+// ========================================
+// 14. ESCAPE KEY
+// ========================================
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key !== "Escape") {
+            return;
+        }
+
+        if (
+            transactionModal?.classList
+                .contains("show")
+        ) {
+
+            closeTransactionModal();
+
+        }
+
+        if (
+            deleteModal?.classList
+                .contains("show")
+        ) {
+
+            closeDeleteModal();
+
+        }
+
+    }
+);
+
+
+// ========================================
+// 15. TRANSACTION TYPE
+// ========================================
+
+function setTransactionType(type) {
+
+    transactionType.value = type;
+
+
+    typeButtons.forEach(button => {
 
         button.classList.toggle(
             "active",
@@ -211,1038 +590,1096 @@ const setTransactionType = (type) => {
 
     });
 
-    updateCategories(type);
-};
+
+    setCategoryForType(type);
+
+}
+
+
+// Type button click
+
+typeButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            const type =
+                button.dataset.type;
+
+            setTransactionType(type);
+
+        }
+    );
+
+});
 
 
 // ========================================
-// TYPE BUTTON CLICK
+// 16. CATEGORY MANAGEMENT
 // ========================================
 
-typeButtons.forEach((button) => {
+const expenseCategories = [
 
-    button.addEventListener("click", () => {
+    "Food",
+    "Transport",
+    "Bills",
+    "Shopping",
+    "Education",
+    "Entertainment",
+    "Health",
+    "Travel",
+    "Other"
 
-        const selectedType =
-            button.dataset.type;
+];
 
-        setTransactionType(selectedType);
+const incomeCategories = [
+
+    "Salary",
+    "Freelance",
+    "Business",
+    "Scholarship",
+    "Gift",
+    "Other Income"
+
+];
+
+
+function setCategoryForType(
+    type,
+    selectedCategory = null
+) {
+
+    if (!categoryInput) {
+        return;
+    }
+
+    categoryInput.innerHTML = "";
+
+
+    const categories =
+        type === "income"
+            ? incomeCategories
+            : expenseCategories;
+
+
+    categories.forEach(category => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = category;
+
+        option.textContent = category;
+
+        categoryInput.appendChild(option);
 
     });
 
-});
 
+    if (selectedCategory) {
 
-// ========================================
-// RESET MODAL TO ADD MODE
-// ========================================
-
-const resetTransactionModal = () => {
-
-    editingTransactionId = null;
-
-    if (transactionForm) {
-        transactionForm.reset();
-    }
-
-    setTransactionType("expense");
-
-    setDefaultDate();
-
-    if (modalTitle) {
-        modalTitle.textContent =
-            "Add Transaction";
-    }
-
-    if (submitButton) {
-        submitButton.textContent =
-            "Add Transaction";
-    }
-
-};
-
-
-// ========================================
-// OPEN ADD TRANSACTION MODAL
-// ========================================
-
-addBtn?.addEventListener("click", () => {
-
-    resetTransactionModal();
-
-    transactionModal?.classList.add("show");
-
-});
-
-
-// ========================================
-// CLOSE MODAL
-// ========================================
-
-const closeModal = () => {
-
-    transactionModal?.classList.remove("show");
-
-    resetTransactionModal();
-
-};
-
-
-// ========================================
-// CLOSE BUTTON
-// ========================================
-
-closeModalBtn?.addEventListener(
-    "click",
-    closeModal
-);
-
-
-// ========================================
-// CLOSE BACKDROP
-// ========================================
-
-transactionModal?.addEventListener(
-    "click",
-    (event) => {
-
-        if (
-            event.target === transactionModal
-        ) {
-            closeModal();
-        }
+        categoryInput.value =
+            selectedCategory;
 
     }
-);
+
+}
 
 
 // ========================================
-// CLOSE WITH ESCAPE
+// 17. CREATE TRANSACTION
 // ========================================
 
-document.addEventListener(
-    "keydown",
-    (event) => {
+function createTransaction() {
 
-        if (
-            event.key === "Escape" &&
-            transactionModal?.classList.contains("show")
-        ) {
-            closeModal();
-        }
+    const amount =
+        Number(amountInput.value);
 
+    const type =
+        transactionType.value;
+
+    const category =
+        categoryInput.value;
+
+    const date =
+        dateInput.value;
+
+    const description =
+        descriptionInput.value.trim();
+
+    const notes =
+        notesInput.value.trim();
+
+
+    if (!amount || amount <= 0) {
+
+        showToast(
+            "Please enter a valid amount.",
+            "error"
+        );
+
+        return null;
     }
-);
+
+
+    if (!category) {
+
+        showToast(
+            "Please select a category.",
+            "error"
+        );
+
+        return null;
+    }
+
+
+    if (!date) {
+
+        showToast(
+            "Please select a date.",
+            "error"
+        );
+
+        return null;
+    }
+
+
+    return {
+
+        id:
+            Date.now().toString(),
+
+        type,
+
+        amount,
+
+        category,
+
+        date,
+
+        description:
+            description ||
+            category,
+
+        notes,
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+}
 
 
 // ========================================
-// GET TRANSACTIONS
-// ========================================
-
-const getTransactions = () => {
-
-    return JSON.parse(
-        localStorage.getItem("transactions")
-    ) || [];
-
-};
-
-
-// ========================================
-// SAVE TRANSACTIONS
-// ========================================
-
-const saveTransactions = (transactions) => {
-
-    localStorage.setItem(
-        "transactions",
-        JSON.stringify(transactions)
-    );
-
-};
-
-
-// ========================================
-// SAVE / UPDATE TRANSACTION
+// 18. FORM SUBMIT
 // ========================================
 
 transactionForm?.addEventListener(
     "submit",
-    (event) => {
+    event => {
 
         event.preventDefault();
 
 
-        // Selected type
+        // EDIT
 
-        const activeType =
-            document.querySelector(
-                ".type-btn.active"
-            );
+        if (editingTransactionId) {
 
-        const type =
-            activeType?.dataset.type || "expense";
-
-
-        // Form values
-
-        const amount =
-            Number(amountInput?.value);
-
-        const category =
-            categorySelect?.value || "";
-
-        const date =
-            dateInput?.value || "";
-
-        const description =
-            descriptionInput?.value.trim() || "";
-
-
-        // Basic validation
-
-        if (
-            !amount ||
-            amount <= 0 ||
-            !category ||
-            !date
-        ) {
-
-            alert(
-                "Please fill all required fields."
-            );
-
-            return;
-
-        }
-
-
-        let transactions =
-            getTransactions();
-
-
-        // ====================================
-        // EDIT EXISTING TRANSACTION
-        // ====================================
-
-        if (editingTransactionId !== null) {
-
-            transactions =
-                transactions.map(
-                    (transaction) => {
-
-                        if (
-                            transaction.id ===
-                            editingTransactionId
-                        ) {
-
-                            return {
-
-                                ...transaction,
-
-                                type: type,
-
-                                amount: amount,
-
-                                category: category,
-
-                                date: date,
-
-                                description:
-                                    description
-
-                            };
-
-                        }
-
-                        return transaction;
-
-                    }
+            const index =
+                transactions.findIndex(
+                    transaction =>
+                        transaction.id ===
+                        editingTransactionId
                 );
 
 
-            saveTransactions(
-                transactions
-            );
+            if (index !== -1) {
 
+                const updatedTransaction = {
 
-            alert(
-                "Transaction updated successfully!"
-            );
+                    ...transactions[index],
 
-        }
+                    type:
+                        transactionType.value,
 
+                    amount:
+                        Number(amountInput.value),
 
-        // ====================================
-        // ADD NEW TRANSACTION
-        // ====================================
+                    category:
+                        categoryInput.value,
 
-        else {
+                    date:
+                        dateInput.value,
 
-            const transaction = {
+                    description:
+                        descriptionInput.value.trim() ||
+                        categoryInput.value,
 
-                id: Date.now(),
+                    notes:
+                        notesInput.value.trim()
 
-                type: type,
+                };
 
-                amount: amount,
 
-                category: category,
+                transactions[index] =
+                    updatedTransaction;
 
-                date: date,
 
-                description: description
+                saveTransactions();
 
-            };
+                renderEverything();
 
+                closeTransactionModal();
 
-            transactions.push(
-                transaction
-            );
-
-
-            saveTransactions(
-                transactions
-            );
-
-
-            alert(
-                "Transaction added successfully!"
-            );
-
-        }
-
-
-        // Update everything
-
-        closeModal();
-
-        displayTransactions();
-
-        displayAllTransactions();
-
-        updateSummary();
-
-    }
-);
-
-
-// ========================================
-// FORMAT CATEGORY
-// ========================================
-
-const formatCategory = (category) => {
-
-    if (!category) return "Other";
-
-    return category
-        .split(" ")
-        .map(
-            word =>
-                word.charAt(0).toUpperCase() +
-                word.slice(1)
-        )
-        .join(" ");
-
-};
-
-
-// ========================================
-// DISPLAY RECENT TRANSACTIONS
-// ========================================
-
-const transactionsList =
-    document.querySelector(
-        "#transactionsList"
-    );
-
-
-const displayTransactions = () => {
-
-    if (!transactionsList) return;
-
-
-    const transactions =
-        getTransactions();
-
-
-    transactionsList.innerHTML = "";
-
-
-    // No transactions
-
-    if (transactions.length === 0) {
-
-        transactionsList.innerHTML = `
-
-            <p class="no-transactions">
-                No transactions yet.
-            </p>
-
-        `;
-
-        return;
-
-    }
-
-
-    // Latest 5
-
-    const recentTransactions =
-        transactions
-            .slice()
-            .reverse()
-            .slice(0, 5);
-
-
-    recentTransactions.forEach(
-        (transaction) => {
-
-            const transactionElement =
-                document.createElement("div");
-
-
-            transactionElement.classList.add(
-                "transaction"
-            );
-
-
-            const isIncome =
-                transaction.type === "income";
-
-
-            const sign =
-                isIncome ? "+" : "-";
-
-
-            const amountClass =
-                isIncome
-                    ? "income"
-                    : "expense";
-
-
-            transactionElement.innerHTML = `
-
-                <div class="transaction-icon">
-                    ${isIncome ? "💰" : "💸"}
-                </div>
-
-
-                <div class="transaction-info">
-
-                    <h3>
-                        ${formatCategory(
-                            transaction.category
-                        )}
-                    </h3>
-
-                    <p>
-                        ${
-                            transaction.description ||
-                            "No description"
-                        }
-                    </p>
-
-                </div>
-
-
-                <span
-                    class="transaction-amount ${amountClass}"
-                >
-                    ${sign}₹${Number(
-                        transaction.amount
-                    ).toLocaleString("en-IN")}
-                </span>
-
-
-                <div class="transaction-actions">
-
-                    <button
-                        type="button"
-                        class="edit-btn"
-                        data-id="${transaction.id}"
-                        title="Edit"
-                    >
-                        ✏️
-                    </button>
-
-                    <button
-                        type="button"
-                        class="delete-btn"
-                        data-id="${transaction.id}"
-                        title="Delete"
-                    >
-                        🗑️
-                    </button>
-
-                </div>
-
-            `;
-
-
-            transactionsList.appendChild(
-                transactionElement
-            );
-
-        }
-    );
-
-};
-
-
-// ========================================
-// UPDATE MONTHLY SUMMARY
-// ========================================
-
-const updateSummary = () => {
-
-    const transactions =
-        getTransactions();
-
-
-    const today =
-        new Date();
-
-
-    const currentMonth =
-        today.getMonth();
-
-
-    const currentYear =
-        today.getFullYear();
-
-
-    let totalIncome = 0;
-
-    let totalExpenses = 0;
-
-
-    transactions.forEach(
-        (transaction) => {
-
-            if (!transaction.date) return;
-
-
-            // YYYY-MM-DD ko safely parse karna
-
-            const parts =
-                transaction.date.split("-");
-
-
-            if (parts.length !== 3) return;
-
-
-            const transactionYear =
-                Number(parts[0]);
-
-
-            const transactionMonth =
-                Number(parts[1]) - 1;
-
-
-            // Current month only
-
-            if (
-                transactionYear === currentYear &&
-                transactionMonth === currentMonth
-            ) {
-
-                const amount =
-                    Number(transaction.amount) || 0;
-
-
-                if (
-                    transaction.type ===
-                    "income"
-                ) {
-
-                    totalIncome += amount;
-
-                }
-
-
-                if (
-                    transaction.type ===
-                    "expense"
-                ) {
-
-                    totalExpenses += amount;
-
-                }
+                showToast(
+                    "Transaction updated successfully."
+                );
 
             }
 
-        }
-    );
-
-
-    const totalBalance =
-        totalIncome - totalExpenses;
-
-
-    const balanceElement =
-        document.querySelector(
-            "#totalBalance"
-        );
-
-
-    const incomeElement =
-        document.querySelector(
-            "#totalIncome"
-        );
-
-
-    const expenseElement =
-        document.querySelector(
-            "#totalExpenses"
-        );
-
-
-    if (balanceElement) {
-
-        balanceElement.textContent =
-            `₹${totalBalance.toLocaleString(
-                "en-IN"
-            )}`;
-
-    }
-
-
-    if (incomeElement) {
-
-        incomeElement.textContent =
-            `₹${totalIncome.toLocaleString(
-                "en-IN"
-            )}`;
-
-    }
-
-
-    if (expenseElement) {
-
-        expenseElement.textContent =
-            `₹${totalExpenses.toLocaleString(
-                "en-IN"
-            )}`;
-
-    }
-
-};
-
-
-// ========================================
-// EDIT TRANSACTION
-// ========================================
-
-const editTransaction = (id) => {
-
-    const transactions =
-        getTransactions();
-
-
-    const transaction =
-        transactions.find(
-            (item) =>
-                item.id === id
-        );
-
-
-    if (!transaction) return;
-
-
-    editingTransactionId =
-        transaction.id;
-
-
-    // Set transaction type
-
-    setTransactionType(
-        transaction.type
-    );
-
-
-    // Fill form
-
-    if (amountInput) {
-
-        amountInput.value =
-            transaction.amount;
-
-    }
-
-
-    if (categorySelect) {
-
-        categorySelect.value =
-            transaction.category;
-
-    }
-
-
-    if (dateInput) {
-
-        dateInput.value =
-            transaction.date;
-
-    }
-
-
-    if (descriptionInput) {
-
-        descriptionInput.value =
-            transaction.description || "";
-
-    }
-
-
-    // Change modal text
-
-    if (modalTitle) {
-
-        modalTitle.textContent =
-            "Edit Transaction";
-
-    }
-
-
-    if (submitButton) {
-
-        submitButton.textContent =
-            "Save Changes";
-
-    }
-
-
-    // Open modal
-
-    transactionModal?.classList.add(
-        "show"
-    );
-
-};
-
-
-// ========================================
-// DELETE TRANSACTION
-// ========================================
-
-const deleteTransaction = (id) => {
-
-    const transactions =
-        getTransactions();
-
-
-    const transaction =
-        transactions.find(
-            (item) =>
-                item.id === id
-        );
-
-
-    if (!transaction) return;
-
-
-    const confirmed =
-        confirm(
-            "Are you sure you want to delete this transaction?"
-        );
-
-
-    if (!confirmed) return;
-
-
-    const updatedTransactions =
-        transactions.filter(
-            (item) =>
-                item.id !== id
-        );
-
-
-    saveTransactions(
-        updatedTransactions
-    );
-
-
-    // Update UI
-
-    displayTransactions();
-
-    displayAllTransactions();
-
-    updateSummary();
-
-};
-
-
-// ========================================
-// EDIT / DELETE CLICK HANDLER
-// ========================================
-
-document.addEventListener(
-    "click",
-    (event) => {
-
-
-        // Edit
-
-        const editBtn =
-            event.target.closest(
-                ".edit-btn"
-            );
-
-
-        if (editBtn) {
-
-            const id =
-                Number(
-                    editBtn.dataset.id
-                );
-
-
-            editTransaction(id);
-
             return;
-
         }
 
 
-        // Delete
+        // ADD
 
-        const deleteBtn =
-            event.target.closest(
-                ".delete-btn"
-            );
+        const transaction =
+            createTransaction();
 
 
-        if (deleteBtn) {
-
-            const id =
-                Number(
-                    deleteBtn.dataset.id
-                );
-
-
-            deleteTransaction(id);
-
+        if (!transaction) {
             return;
-
         }
+
+
+        transactions.push(transaction);
+
+        saveTransactions();
+
+        renderEverything();
+
+        closeTransactionModal();
+
+        showToast(
+            "Transaction added successfully."
+        );
 
     }
 );
 
 
 // ========================================
-// VIEW ALL TRANSACTIONS
+// 19. CALCULATE SUMMARY
 // ========================================
 
-const viewAllBtn =
-    document.querySelector(
-        "#viewAllTransactions"
-    );
+function calculateSummary(
+    transactionList = transactions
+) {
+
+    let income = 0;
+
+    let expense = 0;
 
 
-const allTransactionsModal =
-    document.querySelector(
-        "#allTransactionsModal"
-    );
+    transactionList.forEach(transaction => {
+
+        if (transaction.type === "income") {
+
+            income += Number(transaction.amount);
+
+        } else {
+
+            expense += Number(transaction.amount);
+
+        }
+
+    });
 
 
-const closeAllTransactions =
-    document.querySelector(
-        "#closeAllTransactions"
-    );
+    return {
 
+        income,
 
-const allTransactionsList =
-    document.querySelector(
-        "#allTransactionsList"
-    );
+        expense,
+
+        balance:
+            income - expense,
+
+        savings:
+            income - expense
+
+    };
+
+}
 
 
 // ========================================
-// DISPLAY ALL TRANSACTIONS
+// 20. UPDATE DASHBOARD SUMMARY
 // ========================================
 
-const displayAllTransactions = () => {
+function updateDashboardSummary() {
 
-    if (!allTransactionsList) return;
+    const currentMonth =
+        new Date().getMonth();
 
-
-    const transactions =
-        getTransactions();
-
-
-    allTransactionsList.innerHTML = "";
+    const currentYear =
+        new Date().getFullYear();
 
 
-    if (transactions.length === 0) {
+    const monthlyTransactions =
+        transactions.filter(transaction => {
 
-        allTransactionsList.innerHTML = `
+            const date =
+                new Date(
+                    transaction.date + "T00:00:00"
+                );
 
-            <p class="no-transactions">
-                No transactions yet.
-            </p>
+            return (
 
-        `;
+                date.getMonth() === currentMonth &&
 
-        return;
+                date.getFullYear() === currentYear
+
+            );
+
+        });
+
+
+    const summary =
+        calculateSummary(
+            monthlyTransactions
+        );
+
+
+    if (totalIncome) {
+
+        totalIncome.textContent =
+            formatMoney(summary.income);
 
     }
 
 
-    transactions
-        .slice()
-        .reverse()
-        .forEach(
-            (transaction) => {
+    if (totalExpense) {
+
+        totalExpense.textContent =
+            formatMoney(summary.expense);
+
+    }
 
 
-                const isIncome =
-                    transaction.type === "income";
+    if (totalSavings) {
+
+        totalSavings.textContent =
+            formatMoney(summary.savings);
+
+    }
 
 
-                const sign =
-                    isIncome ? "+" : "-";
+    // Balance = all-time balance
+
+    const allSummary =
+        calculateSummary(transactions);
 
 
-                const amountClass =
-                    isIncome
-                        ? "income"
-                        : "expense";
+    if (totalBalance) {
+
+        totalBalance.textContent =
+            formatMoney(allSummary.balance);
+
+    }
+
+}
 
 
-                const transactionElement =
-                    document.createElement("div");
+// ========================================
+// 21. TRANSACTION ICON
+// ========================================
+
+function getCategoryIcon(category) {
+
+    const icons = {
+
+        Food: "🍔",
+
+        Transport: "🚗",
+
+        Bills: "🧾",
+
+        Shopping: "🛍️",
+
+        Education: "📚",
+
+        Entertainment: "🎬",
+
+        Health: "❤️",
+
+        Travel: "✈️",
+
+        Salary: "💼",
+
+        Freelance: "💻",
+
+        Business: "🏢",
+
+        Scholarship: "🎓",
+
+        Gift: "🎁",
+
+        "Other Income": "💰",
+
+        Other: "📦"
+
+    };
 
 
-                transactionElement.classList.add(
-                    "transaction"
-                );
+    return icons[category] || "💰";
+
+}
 
 
-                transactionElement.innerHTML = `
+// ========================================
+// 22. CREATE TRANSACTION HTML
+// ========================================
 
-                    <div class="transaction-icon">
-                        ${isIncome ? "💰" : "💸"}
-                    </div>
+function createTransactionHTML(
+    transaction,
+    showActions = false
+) {
 
-
-                    <div class="transaction-info">
-
-                        <h3>
-                            ${formatCategory(
-                                transaction.category
-                            )}
-                        </h3>
-
-                        <p>
-                            ${
-                                transaction.description ||
-                                "No description"
-                            }
-                            • ${transaction.date}
-                        </p>
-
-                    </div>
+    const amount =
+        Number(transaction.amount);
 
 
-                    <span
-                        class="transaction-amount ${amountClass}"
-                    >
-                        ${sign}₹${Number(
-                            transaction.amount
-                        ).toLocaleString("en-IN")}
-                    </span>
+    const sign =
+        transaction.type === "income"
+            ? "+"
+            : "-";
 
+
+    const amountClass =
+        transaction.type === "income"
+            ? "income"
+            : "expense";
+
+
+    return `
+
+        <div
+            class="transaction"
+            data-id="${transaction.id}"
+        >
+
+            <div class="transaction-icon">
+
+                ${getCategoryIcon(
+                    transaction.category
+                )}
+
+            </div>
+
+
+            <div class="transaction-info">
+
+                <h3>
+                    ${escapeHTML(
+                        transaction.description ||
+                        transaction.category
+                    )}
+                </h3>
+
+                <p>
+                    ${escapeHTML(
+                        transaction.category
+                    )}
+                    •
+                    ${formatDate(
+                        transaction.date
+                    )}
+                </p>
+
+            </div>
+
+
+            <span
+                class="transaction-amount ${amountClass}"
+            >
+
+                ${sign}${formatMoney(amount)}
+
+            </span>
+
+
+            ${
+                showActions
+                    ? `
 
                     <div class="transaction-actions">
 
                         <button
-                            type="button"
                             class="edit-btn"
-                            data-id="${transaction.id}"
-                            title="Edit"
+                            onclick="editTransaction('${transaction.id}')"
                         >
                             ✏️
                         </button>
 
                         <button
-                            type="button"
                             class="delete-btn"
-                            data-id="${transaction.id}"
-                            title="Delete"
+                            onclick="deleteTransaction('${transaction.id}')"
                         >
                             🗑️
                         </button>
 
                     </div>
 
-                `;
+                    `
+                    : ""
+            }
+
+        </div>
+
+    `;
+
+}
 
 
-                allTransactionsList.appendChild(
-                    transactionElement
-                );
+// ========================================
+// 23. ESCAPE HTML
+// ========================================
+
+function escapeHTML(value) {
+
+    return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+// ========================================
+// 24. SORT TRANSACTIONS
+// ========================================
+
+function sortTransactions(list) {
+
+    return [...list].sort(
+        (a, b) => {
+
+            const dateDifference =
+                new Date(b.date) -
+                new Date(a.date);
+
+
+            if (dateDifference !== 0) {
+
+                return dateDifference;
 
             }
+
+
+            return (
+                Number(b.createdAt || 0) -
+                Number(a.createdAt || 0)
+            );
+
+        }
+    );
+
+}
+
+
+// ========================================
+// 25. RECENT TRANSACTIONS
+// ========================================
+
+function renderRecentTransactions() {
+
+    if (!recentTransactions) {
+        return;
+    }
+
+
+    const sorted =
+        sortTransactions(transactions);
+
+
+    const recent =
+        sorted.slice(0, 5);
+
+
+    if (recent.length === 0) {
+
+        recentTransactions.innerHTML = `
+
+            <div class="empty-state">
+
+                <span>🧾</span>
+
+                <p>
+                    No transactions yet.
+                </p>
+
+                <small>
+                    Add your first transaction.
+                </small>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    recentTransactions.innerHTML =
+        recent
+            .map(transaction =>
+                createTransactionHTML(
+                    transaction,
+                    false
+                )
+            )
+            .join("");
+
+}
+
+
+// ========================================
+// 26. FILTER TRANSACTIONS
+// ========================================
+
+function getFilteredTransactions() {
+
+    let filtered =
+        [...transactions];
+
+
+    // Search
+
+    const search =
+        searchTransaction?.value
+            .trim()
+            .toLowerCase();
+
+
+    if (search) {
+
+        filtered =
+            filtered.filter(transaction => {
+
+                return (
+
+                    transaction.description
+                        ?.toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    transaction.category
+                        ?.toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    transaction.notes
+                        ?.toLowerCase()
+                        .includes(search)
+
+                );
+
+            });
+
+    }
+
+
+    // Type
+
+    const selectedType =
+        typeFilter?.value;
+
+
+    if (
+        selectedType &&
+        selectedType !== "all"
+    ) {
+
+        filtered =
+            filtered.filter(
+                transaction =>
+                    transaction.type ===
+                    selectedType
+            );
+
+    }
+
+
+    // Category
+
+    const selectedCategory =
+        categoryFilter?.value;
+
+
+    if (
+        selectedCategory &&
+        selectedCategory !== "all"
+    ) {
+
+        filtered =
+            filtered.filter(
+                transaction =>
+                    transaction.category ===
+                    selectedCategory
+            );
+
+    }
+
+
+    // Date
+
+    const selectedDate =
+        dateFilter?.value;
+
+
+    if (
+        selectedDate &&
+        selectedDate !== "all"
+    ) {
+
+        filtered =
+            filtered.filter(
+                transaction =>
+                    matchesDateFilter(
+                        transaction.date,
+                        selectedDate
+                    )
+            );
+
+    }
+
+
+    return sortTransactions(filtered);
+
+}
+
+
+// ========================================
+// 27. DATE FILTER
+// ========================================
+
+function matchesDateFilter(
+    dateString,
+    filter
+) {
+
+    const transactionDate =
+        new Date(
+            dateString + "T00:00:00"
         );
 
-};
+
+    const now =
+        new Date();
 
 
-// ========================================
-// OPEN VIEW ALL
-// ========================================
+    if (filter === "today") {
 
-viewAllBtn?.addEventListener(
-    "click",
-    (event) => {
-
-        event.preventDefault();
-
-        displayAllTransactions();
-
-        allTransactionsModal?.classList.add(
-            "show"
+        return (
+            transactionDate.toDateString() ===
+            now.toDateString()
         );
 
     }
+
+
+    if (filter === "week") {
+
+        const day =
+            now.getDay();
+
+        const diff =
+            day === 0 ? 6 : day - 1;
+
+        const start =
+            new Date(now);
+
+        start.setHours(0, 0, 0, 0);
+
+        start.setDate(
+            now.getDate() - diff
+        );
+
+
+        return transactionDate >= start;
+
+    }
+
+
+    if (filter === "month") {
+
+        return (
+
+            transactionDate.getMonth() ===
+            now.getMonth()
+
+            &&
+
+            transactionDate.getFullYear() ===
+            now.getFullYear()
+
+        );
+
+    }
+
+
+    if (filter === "year") {
+
+        return (
+            transactionDate.getFullYear() ===
+            now.getFullYear()
+        );
+
+    }
+
+
+    return true;
+
+}
+
+
+// ========================================
+// 28. CATEGORY FILTER OPTIONS
+// ========================================
+
+function updateCategoryFilter() {
+
+    if (!categoryFilter) {
+        return;
+    }
+
+
+    const currentValue =
+        categoryFilter.value;
+
+
+    const categories =
+        [...new Set(
+            transactions.map(
+                transaction =>
+                    transaction.category
+            )
+        )]
+        .sort();
+
+
+    categoryFilter.innerHTML = `
+
+        <option value="all">
+            All Categories
+        </option>
+
+    `;
+
+
+    categories.forEach(category => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = category;
+
+        option.textContent = category;
+
+        categoryFilter.appendChild(option);
+
+    });
+
+
+    if (
+        categories.includes(currentValue)
+    ) {
+
+        categoryFilter.value =
+            currentValue;
+
+    }
+
+}
+
+
+// ========================================
+// 29. RENDER ALL TRANSACTIONS
+// ========================================
+
+function renderAllTransactions() {
+
+    if (!allTransactions) {
+        return;
+    }
+
+
+    const filtered =
+        getFilteredTransactions();
+
+
+    if (filtered.length === 0) {
+
+        allTransactions.innerHTML = `
+
+            <div class="empty-state">
+
+                <span>🔍</span>
+
+                <p>
+                    No transactions found.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    allTransactions.innerHTML =
+        filtered
+            .map(transaction =>
+                createTransactionHTML(
+                    transaction,
+                    true
+                )
+            )
+            .join("");
+
+}
+
+
+// ========================================
+// 30. EDIT TRANSACTION
+// ========================================
+
+function editTransaction(id) {
+
+    const transaction =
+        transactions.find(
+            item => item.id === id
+        );
+
+
+    if (!transaction) {
+        return;
+    }
+
+
+    openTransactionModal(transaction);
+
+}
+
+
+// Make function available to inline HTML
+
+window.editTransaction =
+    editTransaction;
+
+
+// ========================================
+// 31. DELETE TRANSACTION
+// ========================================
+
+function deleteTransaction(id) {
+
+    deletingTransactionId = id;
+
+    deleteModal?.classList.add("show");
+
+    deleteModal?.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+
+
+window.deleteTransaction =
+    deleteTransaction;
+
+
+// ========================================
+// 32. CLOSE DELETE MODAL
+// ========================================
+
+function closeDeleteModal() {
+
+    deleteModal?.classList.remove("show");
+
+    deleteModal?.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    deletingTransactionId = null;
+
+}
+
+
+cancelDelete?.addEventListener(
+    "click",
+    closeDeleteModal
 );
 
 
 // ========================================
-// CLOSE VIEW ALL
+// 33. CONFIRM DELETE
 // ========================================
 
-closeAllTransactions?.addEventListener(
+confirmDelete?.addEventListener(
     "click",
     () => {
 
-        allTransactionsModal?.classList.remove(
-            "show"
+        if (!deletingTransactionId) {
+            return;
+        }
+
+
+        transactions =
+            transactions.filter(
+                transaction =>
+                    transaction.id !==
+                    deletingTransactionId
+            );
+
+
+        saveTransactions();
+
+        renderEverything();
+
+        closeDeleteModal();
+
+        showToast(
+            "Transaction deleted successfully."
         );
 
     }
 );
 
 
-// ========================================
-// CLOSE VIEW ALL BACKDROP
-// ========================================
+// Click outside delete modal
 
-allTransactionsModal?.addEventListener(
+deleteModal?.addEventListener(
     "click",
-    (event) => {
+    event => {
 
         if (
-            event.target ===
-            allTransactionsModal
+            event.target === deleteModal
         ) {
 
-            allTransactionsModal.classList.remove(
-                "show"
-            );
+            closeDeleteModal();
 
         }
 
@@ -1251,20 +1688,962 @@ allTransactionsModal?.addEventListener(
 
 
 // ========================================
-// INITIALIZE DASHBOARD
+// 34. REPORT PERIOD
 // ========================================
 
-// Important:
-// Page refresh ke baad bhi summary
-// aur transactions immediately load honge.
+function getReportTransactions() {
 
-displayTransactions();
+    const period =
+        reportFilter?.value || "month";
 
-updateSummary();
+
+    const selectedMonth =
+        Number(monthFilter?.value);
+
+
+    const selectedYear =
+        Number(yearFilter?.value);
+
+
+    return transactions.filter(
+        transaction => {
+
+            const date =
+                new Date(
+                    transaction.date +
+                    "T00:00:00"
+                );
+
+
+            if (period === "year") {
+
+                return (
+                    date.getFullYear() ===
+                    selectedYear
+                );
+
+            }
+
+
+            if (period === "month") {
+
+                return (
+
+                    date.getMonth() ===
+                    selectedMonth
+
+                    &&
+
+                    date.getFullYear() ===
+                    selectedYear
+
+                );
+
+            }
+
+
+            if (period === "week") {
+
+                return matchesDateFilter(
+                    transaction.date,
+                    "week"
+                );
+
+            }
+
+
+            return true;
+
+        }
+    );
+
+}
 
 
 // ========================================
-// DEFAULT EXPENSE CATEGORY
+// 35. POPULATE MONTH FILTER
 // ========================================
 
-setTransactionType("expense");
+function populateMonthFilter() {
+
+    if (!monthFilter) {
+        return;
+    }
+
+
+    const months = [
+
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+
+    ];
+
+
+    const currentMonth =
+        new Date().getMonth();
+
+
+    monthFilter.innerHTML = "";
+
+
+    months.forEach(
+        (month, index) => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = index;
+
+            option.textContent = month;
+
+            if (index === currentMonth) {
+
+                option.selected = true;
+
+            }
+
+            monthFilter.appendChild(option);
+
+        }
+    );
+
+}
+
+
+// ========================================
+// 36. POPULATE YEAR FILTER
+// ========================================
+
+function populateYearFilter() {
+
+    if (!yearFilter) {
+        return;
+    }
+
+
+    const currentYear =
+        new Date().getFullYear();
+
+
+    yearFilter.innerHTML = "";
+
+
+    for (
+        let year = currentYear;
+        year >= currentYear - 5;
+        year--
+    ) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = year;
+
+        option.textContent = year;
+
+        yearFilter.appendChild(option);
+
+    }
+
+}
+
+
+// ========================================
+// 37. REPORT FILTER
+// ========================================
+
+function updateReportFilters() {
+
+    const period =
+        reportFilter?.value;
+
+
+    if (!monthFilter || !yearFilter) {
+        return;
+    }
+
+
+    if (period === "year") {
+
+        monthFilter.style.display =
+            "none";
+
+    } else {
+
+        monthFilter.style.display =
+            "";
+
+    }
+
+
+    if (period === "week") {
+
+        monthFilter.style.display =
+            "none";
+
+        yearFilter.style.display =
+            "none";
+
+    } else {
+
+        yearFilter.style.display =
+            "";
+
+    }
+
+}
+
+
+// ========================================
+// 38. RENDER REPORT
+// ========================================
+
+function renderReport() {
+
+    const reportTransactions =
+        getReportTransactions();
+
+
+    const summary =
+        calculateSummary(
+            reportTransactions
+        );
+
+
+    if (reportIncome) {
+
+        reportIncome.textContent =
+            formatMoney(summary.income);
+
+    }
+
+
+    if (reportExpense) {
+
+        reportExpense.textContent =
+            formatMoney(summary.expense);
+
+    }
+
+
+    if (reportSavings) {
+
+        reportSavings.textContent =
+            formatMoney(summary.savings);
+
+    }
+
+
+    if (reportTransactionCount) {
+
+        reportTransactionCount.textContent =
+            reportTransactions.length;
+
+    }
+
+
+    updateIncomeExpenseChart(
+        summary.income,
+        summary.expense
+    );
+
+
+    renderDailySpending(
+        reportTransactions
+    );
+
+
+    renderInsights(
+        reportTransactions
+    );
+
+}
+
+
+// ========================================
+// 39. INCOME VS EXPENSE CHART
+// ========================================
+
+function updateIncomeExpenseChart(
+    income,
+    expense
+) {
+
+    const max =
+        Math.max(income, expense, 1);
+
+
+    const incomePercentage =
+        (income / max) * 100;
+
+
+    const expensePercentage =
+        (expense / max) * 100;
+
+
+    if (chartIncome) {
+
+        chartIncome.textContent =
+            formatMoney(income);
+
+    }
+
+
+    if (chartExpense) {
+
+        chartExpense.textContent =
+            formatMoney(expense);
+
+    }
+
+
+    if (incomeBar) {
+
+        incomeBar.style.width =
+            `${incomePercentage}%`;
+
+    }
+
+
+    if (expenseBar) {
+
+        expenseBar.style.width =
+            `${expensePercentage}%`;
+
+    }
+
+}
+
+
+// ========================================
+// 40. EXPENSE OVERVIEW
+// ========================================
+
+function getOverviewTransactions() {
+
+    const filter =
+        overviewFilter?.value ||
+        "month";
+
+
+    return transactions.filter(
+        transaction => {
+
+            if (transaction.type !== "expense") {
+
+                return false;
+
+            }
+
+
+            return matchesDateFilter(
+                transaction.date,
+                filter
+            );
+
+        }
+    );
+
+}
+
+
+function renderExpenseOverview() {
+
+    if (!categoryOverview) {
+        return;
+    }
+
+
+    const expenses =
+        getOverviewTransactions();
+
+
+    if (expenses.length === 0) {
+
+        categoryOverview.innerHTML = `
+
+            <div class="empty-state">
+
+                <span>📊</span>
+
+                <p>
+                    No expense data available.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const categoryTotals = {};
+
+
+    expenses.forEach(transaction => {
+
+        const category =
+            transaction.category;
+
+
+        categoryTotals[category] =
+            (categoryTotals[category] || 0)
+            +
+            Number(transaction.amount);
+
+    });
+
+
+    const sorted =
+        Object.entries(categoryTotals)
+            .sort((a, b) => b[1] - a[1]);
+
+
+    const total =
+        expenses.reduce(
+            (sum, transaction) =>
+                sum +
+                Number(transaction.amount),
+            0
+        );
+
+
+    categoryOverview.innerHTML =
+        sorted
+            .map(
+                ([category, amount]) => {
+
+                    const percentage =
+                        (amount / total) * 100;
+
+
+                    return `
+
+                        <div class="category-item">
+
+                            <div class="category-header">
+
+                                <span>
+                                    ${getCategoryIcon(category)}
+                                    ${escapeHTML(category)}
+                                </span>
+
+                                <strong>
+                                    ${formatMoney(amount)}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="category-track">
+
+                                <div
+                                    class="category-bar"
+                                    style="width:${percentage}%"
+                                >
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+// ========================================
+// 41. DAILY SPENDING
+// ========================================
+
+function renderDailySpending(
+    reportTransactions
+) {
+
+    if (!dailySpending) {
+        return;
+    }
+
+
+    const expenses =
+        reportTransactions.filter(
+            transaction =>
+                transaction.type ===
+                "expense"
+        );
+
+
+    if (expenses.length === 0) {
+
+        dailySpending.innerHTML = `
+
+            <div class="empty-state">
+
+                <span>📅</span>
+
+                <p>
+                    No spending data available.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const dailyTotals = {};
+
+
+    expenses.forEach(transaction => {
+
+        dailyTotals[transaction.date] =
+            (dailyTotals[transaction.date] || 0)
+            +
+            Number(transaction.amount);
+
+    });
+
+
+    const sortedDates =
+        Object.keys(dailyTotals)
+            .sort()
+            .reverse()
+            .slice(0, 7);
+
+
+    dailySpending.innerHTML =
+        sortedDates
+            .map(date => {
+
+                return `
+
+                    <div class="daily-item">
+
+                        <span>
+                            ${formatDate(date)}
+                        </span>
+
+                        <strong>
+                            ${formatMoney(
+                                dailyTotals[date]
+                            )}
+                        </strong>
+
+                    </div>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+// ========================================
+// 42. SMART INSIGHTS
+// ========================================
+
+function renderInsights(
+    reportTransactions
+) {
+
+    if (!insightsList) {
+        return;
+    }
+
+
+    if (reportTransactions.length === 0) {
+
+        insightsList.innerHTML = `
+
+            <div class="insight-item">
+
+                <span>💡</span>
+
+                <p>
+                    Add some transactions to generate
+                    personalized insights.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const summary =
+        calculateSummary(
+            reportTransactions
+        );
+
+
+    const insights = [];
+
+
+    // Expense insight
+
+    if (summary.expense > 0) {
+
+        insights.push({
+
+            icon: "💸",
+
+            text:
+                `You spent ${formatMoney(
+                    summary.expense
+                )} during this period.`
+
+        });
+
+    }
+
+
+    // Savings insight
+
+    if (summary.income > 0) {
+
+        const savingsRate =
+            (
+                summary.savings /
+                summary.income
+            ) * 100;
+
+
+        if (savingsRate >= 20) {
+
+            insights.push({
+
+                icon: "🎯",
+
+                text:
+                    `Great! Your savings rate is about ${Math.round(
+                        savingsRate
+                    )}%.`
+
+            });
+
+        } else if (savingsRate >= 0) {
+
+            insights.push({
+
+                icon: "💡",
+
+                text:
+                    `Your savings rate is about ${Math.round(
+                        savingsRate
+                    )}%. Try to increase it gradually.`
+
+            });
+
+        } else {
+
+            insights.push({
+
+                icon: "⚠️",
+
+                text:
+                    "Your expenses are higher than your income in this period."
+
+            });
+
+        }
+
+    }
+
+
+    // Highest category
+
+    const categories = {};
+
+
+    reportTransactions
+        .filter(
+            transaction =>
+                transaction.type ===
+                "expense"
+        )
+        .forEach(transaction => {
+
+            categories[transaction.category] =
+                (
+                    categories[
+                        transaction.category
+                    ] || 0
+                )
+                +
+                Number(transaction.amount);
+
+        });
+
+
+    const highestCategory =
+        Object.entries(categories)
+            .sort((a, b) => b[1] - a[1])[0];
+
+
+    if (highestCategory) {
+
+        insights.push({
+
+            icon: getCategoryIcon(
+                highestCategory[0]
+            ),
+
+            text:
+                `${highestCategory[0]} is your highest expense category with ${formatMoney(
+                    highestCategory[1]
+                )} spent.`
+
+        });
+
+    }
+
+
+    insightsList.innerHTML =
+        insights
+            .map(insight => {
+
+                return `
+
+                    <div class="insight-item">
+
+                        <span>
+                            ${insight.icon}
+                        </span>
+
+                        <p>
+                            ${escapeHTML(
+                                insight.text
+                            )}
+                        </p>
+
+                    </div>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+// ========================================
+// 43. REPORT EVENTS
+// ========================================
+
+reportFilter?.addEventListener(
+    "change",
+    () => {
+
+        updateReportFilters();
+
+        renderReport();
+
+    }
+);
+
+
+monthFilter?.addEventListener(
+    "change",
+    renderReport
+);
+
+
+yearFilter?.addEventListener(
+    "change",
+    renderReport
+);
+
+
+// ========================================
+// 44. OVERVIEW FILTER
+// ========================================
+
+overviewFilter?.addEventListener(
+    "change",
+    renderExpenseOverview
+);
+
+
+// ========================================
+// 45. TRANSACTION FILTER EVENTS
+// ========================================
+
+searchTransaction?.addEventListener(
+    "input",
+    renderAllTransactions
+);
+
+
+typeFilter?.addEventListener(
+    "change",
+    renderAllTransactions
+);
+
+
+categoryFilter?.addEventListener(
+    "change",
+    renderAllTransactions
+);
+
+
+dateFilter?.addEventListener(
+    "change",
+    renderAllTransactions
+);
+
+
+// ========================================
+// 46. VIEW ALL BUTTON
+// ========================================
+
+viewAllBtn?.addEventListener(
+    "click",
+    () => {
+
+        allTransactionsSection?.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+    }
+);
+
+
+// ========================================
+// 47. TOAST
+// ========================================
+
+let toastTimer;
+
+
+function showToast(
+    message,
+    type = "success"
+) {
+
+    if (!toast) {
+        return;
+    }
+
+
+    toastMessage.textContent =
+        message;
+
+
+    const icon =
+        document.querySelector("#toastIcon");
+
+
+    if (icon) {
+
+        icon.textContent =
+            type === "error"
+                ? "!"
+                : "✓";
+
+        icon.style.color =
+            type === "error"
+                ? "var(--expense)"
+                : "var(--income)";
+
+    }
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(toastTimer);
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove("show");
+
+            },
+            3000
+        );
+
+}
+
+
+// ========================================
+// 48. MAIN RENDER FUNCTION
+// ========================================
+
+function renderEverything() {
+
+    updateDashboardSummary();
+
+    updateCategoryFilter();
+
+    renderRecentTransactions();
+
+    renderAllTransactions();
+
+    renderExpenseOverview();
+
+    renderReport();
+
+}
+
+
+// ========================================
+// 49. INITIALIZE APP
+// ========================================
+
+function initializeApp() {
+
+    loadTransactions();
+
+    updateGreeting();
+
+    updateCurrentDate();
+
+    populateMonthFilter();
+
+    populateYearFilter();
+
+    updateReportFilters();
+
+    setDefaultDate();
+
+    setTransactionType("expense");
+
+    renderEverything();
+
+}
+
+
+// ========================================
+// 50. START APP
+// ========================================
+
+initializeApp();
